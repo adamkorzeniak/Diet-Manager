@@ -1,4 +1,4 @@
-package com.github.adkorzen;
+package com.github.adkorzen.dietManager;
 
 public class Database {
 	public void addToDatabase() {
