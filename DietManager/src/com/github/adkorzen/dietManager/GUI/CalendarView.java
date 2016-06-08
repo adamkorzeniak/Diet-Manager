@@ -39,7 +39,6 @@ public class CalendarView {
 			public void actionPerformed(ActionEvent arg0) {
 				Date datePicked = picker.getDate();
 				MainMenu.getSpinerEditor().getTextField().setValue(datePicked);
-				frame.setVisible(false);
 				frame.dispose();
 				MainMenu.getFrame().setEnabled(true);
 			}

@@ -2,12 +2,14 @@ package com.github.adkorzen.dietManager;
 
 import java.util.Calendar;
 
+import com.github.adkorzen.dietManager.GUI.CalendarView;
 import com.github.adkorzen.dietManager.GUI.MainMenu;
 
 public class DateSetting {
 
 	public void openCalendar() {
-		System.out.println("Calendar opened");
+		MainMenu.getFrame().setEnabled(false);
+		CalendarView.showCalendar();
 	}
 
 	public void setDateToday() {

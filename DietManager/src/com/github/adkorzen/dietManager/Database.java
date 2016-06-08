@@ -1,7 +1,10 @@
 package com.github.adkorzen.dietManager;
 
+import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu;
+
 public class Database {
 	public void addToDatabase() {
+		new AddToDatabaseMenu().createAndShowGUI();
 		System.out.println("added to database");
 	}
 

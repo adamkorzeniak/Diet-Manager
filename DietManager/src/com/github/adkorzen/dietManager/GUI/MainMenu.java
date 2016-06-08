@@ -20,10 +20,8 @@ import javax.swing.SwingConstants;
 import com.github.adkorzen.dietManager.Database;
 import com.github.adkorzen.dietManager.DateSetting;
 
-
-
 public class MainMenu {
-	private JFrame frame;
+	private static JFrame frame;
 	private JButton addToDatabaseButton, editDatabaseButton, checkDatabaseButton;
 	private JButton openCalendarButton, setDateTodayButton, setDateYesterdayButton;
 	private JButton confirmButton;
@@ -91,7 +89,7 @@ public class MainMenu {
 		spinner.setEditor(dateEditor);
 		dateEditor.getTextField().setHorizontalAlignment(SwingConstants.CENTER);
 				
-		setGUIConstraints(c, 0, 2, 3, 1, 1.0, 0.1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		setGUIConstraints(c, 0, 2, 3, 1, 1.0, 0.3, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(spinner, c);
 
 		confirmButton = new JButton("Confirm");
@@ -125,6 +123,10 @@ public class MainMenu {
 				database.proceed();
 			}
 		}
+	}
+	
+	public static JFrame getFrame() {
+		return frame;
 	}
 
 	public static void main(String[] args) {
