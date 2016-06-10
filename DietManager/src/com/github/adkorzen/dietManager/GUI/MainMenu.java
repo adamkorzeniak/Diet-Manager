@@ -1,6 +1,5 @@
 package com.github.adkorzen.dietManager.GUI;
 
-
 import static com.github.adkorzen.dietManager.GUI.GUICoinstraints.setGUIConstraints;
 
 import java.awt.Dimension;
@@ -21,6 +20,7 @@ import javax.swing.SwingConstants;
 
 import com.github.adkorzen.dietManager.Database;
 import com.github.adkorzen.dietManager.DateSetting;
+import com.github.adkorzen.dietManager.ManageDate;
 
 public class MainMenu {
 	private static JFrame frame;
@@ -36,9 +36,6 @@ public class MainMenu {
 	private DateSetting dateSetting;
 
 	public void createAndShowGUI() {
-		
-		database = new Database();
-		dateSetting = new DateSetting();
 
 		frame = new JFrame("Diet Manager");
 		frame.getContentPane().setLayout(new GridBagLayout());
@@ -74,24 +71,19 @@ public class MainMenu {
 		setGUIConstraints(c, 2, 1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(setDateYesterdayButton, c);
 
+		Date date = ManageDate.currentDate;
+		Date earliestDate = ManageDate.earliestDate;
+		Date latestDate = ManageDate.latestDate;
 
-		Calendar calendar = Calendar.getInstance();
-		Date initDate = calendar.getTime();
-		calendar.set(2000, 00, 01);
-		Date earliestDate = calendar.getTime();
-		calendar.set(2040, 00, 00);
-		Date latestDate = calendar.getTime();
-		
-		model = new SpinnerDateModel(initDate,
-                earliestDate,
-                latestDate,
-                Calendar.DAY_OF_MONTH);
-		
+		System.out.println(earliestDate);
+
+		model = new SpinnerDateModel(date, earliestDate, latestDate, 1);
+
 		spinner = new JSpinner(model);
 		dateEditor = new JSpinner.DateEditor(spinner, "dd-MM-yyyy");
 		spinner.setEditor(dateEditor);
 		dateEditor.getTextField().setHorizontalAlignment(SwingConstants.CENTER);
-				
+
 		setGUIConstraints(c, 0, 2, 3, 1, 1.0, 0.3, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(spinner, c);
 
@@ -103,36 +95,35 @@ public class MainMenu {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		monitorWidth = (int) screenSize.getWidth();
 		monitorHeight = (int) screenSize.getHeight();
-		frame.setLocation((monitorWidth - 500)/2, (monitorHeight - 300)/2);
+		frame.setLocation((monitorWidth - 500) / 2, (monitorHeight - 300) / 2);
 		frame.setSize(500, 300);
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		
-		
+
 	}
 
 	private class ButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent evt) {
 			JButton action = (JButton) evt.getSource();
 			if (action == addToDatabaseButton) {
-				database.addToDatabase();
+				Database.addToDatabase();
 			} else if (action == editDatabaseButton) {
-				database.editDatabase();
+				Database.editDatabase();
 			} else if (action == checkDatabaseButton) {
-				database.checkDatabase();
+				Database.checkDatabase();
 			} else if (action == openCalendarButton) {
-				dateSetting.openCalendar();
+				DateSetting.openCalendar();
 			} else if (action == setDateTodayButton) {
-				dateSetting.setDateToday();
+				DateSetting.setDateToday();
 			} else if (action == setDateYesterdayButton) {
-				dateSetting.setDateYesterday();
+				DateSetting.setDateYesterday();
 			} else if (action == confirmButton) {
-				database.proceed();
+				Database.proceed();
 			}
 		}
 	}
-	
+
 	public static JFrame getFrame() {
 		return frame;
 	}
@@ -144,7 +135,7 @@ public class MainMenu {
 			}
 		});
 	}
-	
+
 	public static JSpinner.DateEditor getSpinerEditor() {
 		return dateEditor;
 	}

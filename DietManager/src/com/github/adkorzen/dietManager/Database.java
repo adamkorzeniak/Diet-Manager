@@ -1,22 +1,22 @@
 package com.github.adkorzen.dietManager;
 
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu;
+import com.github.adkorzen.dietManager.GUI.DayMenu;
 
 public class Database {
-	public void addToDatabase() {
+	public static void addToDatabase() {
 		new AddToDatabaseMenu().createAndShowGUI();
 		System.out.println("added to database");
 	}
 
-	public void editDatabase() {
+	public static void editDatabase() {
 		System.out.println("database edited");
 	}
 
-	public void checkDatabase() {
+	public static void checkDatabase() {
 		System.out.println("database checked");
 	}
-
-	public void proceed() {
-		System.out.println("Proceed to day menu");
+	public static void proceed() {
+		new DayMenu().createAndShowGUI();
 	}
 }

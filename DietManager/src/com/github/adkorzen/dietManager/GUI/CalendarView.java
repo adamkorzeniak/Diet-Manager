@@ -49,12 +49,11 @@ public class CalendarView {
 		frame.getContentPane().add(panel);
 
 		frame.setVisible(true);
-		
-frame.addWindowListener(new WindowAdapter() {
-	public void windowClosing(WindowEvent e)
-    {
-		MainMenu.getFrame().setEnabled(true);
-    }
-});
+
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				MainMenu.getFrame().setEnabled(true);
+			}
+		});
 	}
 }
