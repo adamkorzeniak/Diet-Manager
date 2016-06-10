@@ -3,9 +3,11 @@ package com.github.adkorzen.dietManager.GUI;
 
 import static com.github.adkorzen.dietManager.GUI.GUICoinstraints.setGUIConstraints;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
@@ -22,6 +24,7 @@ import com.github.adkorzen.dietManager.DateSetting;
 
 public class MainMenu {
 	private static JFrame frame;
+	int monitorWidth, monitorHeight;
 	private JButton addToDatabaseButton, editDatabaseButton, checkDatabaseButton;
 	private JButton openCalendarButton, setDateTodayButton, setDateYesterdayButton;
 	private JButton confirmButton;
@@ -97,8 +100,13 @@ public class MainMenu {
 		setGUIConstraints(c, 1, 3, GridBagConstraints.BOTH, new Insets(0, 0, 10, 0));
 		frame.add(confirmButton, c);
 
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		monitorWidth = (int) screenSize.getWidth();
+		monitorHeight = (int) screenSize.getHeight();
+		frame.setLocation((monitorWidth - 500)/2, (monitorHeight - 300)/2);
 		frame.setSize(500, 300);
+		frame.setResizable(false);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		
 		
