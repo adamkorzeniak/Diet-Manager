@@ -5,12 +5,13 @@ import java.util.Date;
 
 public class ManageDate {
 	
-	public static Date currentDate;
-	public static Date earliestDate;
-	public static Date latestDate;
+	private static Date currentDate;
+	private static Date earliestDate;
+	private static Date latestDate;
+	private static Calendar calendar;
 	
 	static {
-		Calendar calendar = Calendar.getInstance();
+		calendar = Calendar.getInstance();
 		currentDate = calendar.getTime();
 		calendar.set(2000, 00, 01);
 		earliestDate = calendar.getTime();
@@ -26,5 +27,13 @@ public class ManageDate {
 	}
 	public static Date getDate() {
 		return currentDate;
+	}
+	public static void setDate(Date date) {
+		currentDate = date;
+	}
+	public static void add(int field, int amount) {
+		calendar.setTime(currentDate);
+		calendar.add(field, amount);
+		currentDate = calendar.getTime();
 	}
 }

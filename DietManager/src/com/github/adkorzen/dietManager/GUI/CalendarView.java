@@ -13,7 +13,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jdesktop.swingx.JXDatePicker;
 
+import com.github.adkorzen.dietManager.ManageDate;
+import com.github.adkorzen.dietManager.GUI.CalendarView.Menu;
+
 public class CalendarView {
+
+	private static Menu callFrom;
 
 	public static void showCalendar() {
 
@@ -22,15 +27,12 @@ public class CalendarView {
 
 		frame.setBounds(400, 400, 250, 100);
 
-		Date date = (Date) MainMenu.getSpinerEditor().getTextField().getValue();
+		Date date = ManageDate.getDate();
 		JXDatePicker picker = new JXDatePicker(date);
 		picker.setFormats(new SimpleDateFormat("dd-MM-yyyy"));
 
-		Calendar calendar = picker.getMonthView().getCalendar();
-		calendar.set(2000, 00, 01);
-		Date lowerBound = calendar.getTime();
-		calendar.set(2040, 00, 00);
-		Date upperBound = calendar.getTime();
+		Date lowerBound = ManageDate.getMinDate();
+		Date upperBound = ManageDate.getMaxDate();
 
 		picker.getMonthView().setLowerBound(lowerBound);
 		picker.getMonthView().setUpperBound(upperBound);
@@ -38,9 +40,18 @@ public class CalendarView {
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Date datePicked = picker.getDate();
-				MainMenu.getSpinerEditor().getTextField().setValue(datePicked);
+				ManageDate.setDate(datePicked);
+
 				frame.dispose();
-				MainMenu.getFrame().setEnabled(true);
+
+				if (CalendarView.getCallFrom() == Menu.DayMenu) {
+					DayMenu.getFrame().setEnabled(true);
+					DayMenu.updateDate();
+				} else {
+					MainMenu.getFrame().setEnabled(true);
+					MainMenu.getSpinerEditor().setValue(ManageDate.getDate());
+				}
+
 			}
 		});
 
@@ -52,8 +63,24 @@ public class CalendarView {
 
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				MainMenu.getFrame().setEnabled(true);
+				if (CalendarView.getCallFrom() == Menu.DayMenu) {
+					DayMenu.getFrame().setEnabled(true);
+				} else {
+					MainMenu.getFrame().setEnabled(true);
+				}
 			}
 		});
+	}
+
+	public enum Menu {
+		MainMenu, DayMenu
+	}
+
+	public static void setCallFrom(Menu object) {
+		callFrom = object;
+	}
+
+	public static Menu getCallFrom() {
+		return callFrom;
 	}
 }

@@ -13,14 +13,17 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 
 import com.github.adkorzen.dietManager.Database;
 import com.github.adkorzen.dietManager.DateSetting;
 import com.github.adkorzen.dietManager.ManageDate;
+import com.github.adkorzen.dietManager.GUI.CalendarView.Menu;
 
 public class MainMenu {
 	private static JFrame frame;
@@ -71,11 +74,9 @@ public class MainMenu {
 		setGUIConstraints(c, 2, 1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(setDateYesterdayButton, c);
 
-		Date date = ManageDate.currentDate;
-		Date earliestDate = ManageDate.earliestDate;
-		Date latestDate = ManageDate.latestDate;
-
-		System.out.println(earliestDate);
+		Date date = ManageDate.getDate();
+		Date earliestDate = ManageDate.getMinDate();
+		Date latestDate = ManageDate.getMaxDate();
 
 		model = new SpinnerDateModel(date, earliestDate, latestDate, 1);
 
@@ -83,7 +84,6 @@ public class MainMenu {
 		dateEditor = new JSpinner.DateEditor(spinner, "dd-MM-yyyy");
 		spinner.setEditor(dateEditor);
 		dateEditor.getTextField().setHorizontalAlignment(SwingConstants.CENTER);
-
 		setGUIConstraints(c, 0, 2, 3, 1, 1.0, 0.3, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(spinner, c);
 
@@ -113,6 +113,7 @@ public class MainMenu {
 			} else if (action == checkDatabaseButton) {
 				Database.checkDatabase();
 			} else if (action == openCalendarButton) {
+				CalendarView.setCallFrom(Menu.MainMenu);
 				DateSetting.openCalendar();
 			} else if (action == setDateTodayButton) {
 				DateSetting.setDateToday();
@@ -136,7 +137,7 @@ public class MainMenu {
 		});
 	}
 
-	public static JSpinner.DateEditor getSpinerEditor() {
-		return dateEditor;
+	public static JFormattedTextField getSpinerEditor() {
+		return dateEditor.getTextField();
 	}
 }

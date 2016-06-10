@@ -1,12 +1,14 @@
 package com.github.adkorzen.dietManager;
 
+import java.util.Date;
+
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu;
 import com.github.adkorzen.dietManager.GUI.DayMenu;
+import com.github.adkorzen.dietManager.GUI.MainMenu;
 
 public class Database {
 	public static void addToDatabase() {
 		new AddToDatabaseMenu().createAndShowGUI();
-		System.out.println("added to database");
 	}
 
 	public static void editDatabase() {
@@ -17,6 +19,7 @@ public class Database {
 		System.out.println("database checked");
 	}
 	public static void proceed() {
+		ManageDate.setDate((Date)MainMenu.getSpinerEditor().getValue());
 		new DayMenu().createAndShowGUI();
 	}
 }
