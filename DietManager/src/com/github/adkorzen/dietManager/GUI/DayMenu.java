@@ -39,6 +39,10 @@ public class DayMenu {
 		northPanel.add(dayBack, BorderLayout.LINE_START);
 		northPanel.add(datePicked, BorderLayout.CENTER);
 		northPanel.add(dayForward, BorderLayout.LINE_END);
+		
+		Table.createTable();
+		Table.accessDatabase();
+		frame.getContentPane().add(Table.table);
 
 		frame.setSize(500, 500);
 		frame.setVisible(true);
