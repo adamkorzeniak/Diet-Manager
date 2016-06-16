@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu;
 import com.github.adkorzen.dietManager.GUI.DayMenu;
+import com.github.adkorzen.dietManager.GUI.EditDatabaseMenu;
 import com.github.adkorzen.dietManager.GUI.MainMenu;
 import static com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.*;
 
@@ -13,7 +14,7 @@ public class Database {
 	}
 
 	public static void editDatabase() {
-		System.out.println("database edited");
+		EditDatabaseMenu.createAndShowGUI();
 	}
 
 	public static void checkDatabase() {

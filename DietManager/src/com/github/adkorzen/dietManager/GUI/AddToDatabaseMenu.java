@@ -137,10 +137,13 @@ public class AddToDatabaseMenu {
 
 			carbsLabel = new JLabel("Carbohydronates in grams");
 			carbsAmount = new JFormattedTextField();
+			carbsAmount.setHorizontalAlignment(SwingConstants.CENTER);
 			proteinLabel = new JLabel("Proteins in grams");
 			proteinsAmount = new JFormattedTextField();
+			proteinsAmount.setHorizontalAlignment(SwingConstants.CENTER);
 			fatLabel = new JLabel("Fat in grams");
 			fatAmount = new JFormattedTextField();
+			fatAmount.setHorizontalAlignment(SwingConstants.CENTER);
 			carbsAmount.addKeyListener(new KeyAdapter() {
 				public void keyTyped(KeyEvent e) {
 					NumberListener.doubleListener(carbsAmount, e, 9999);
@@ -300,14 +303,14 @@ public class AddToDatabaseMenu {
 		String message = "";
 		if (mealNameInput.getText().isEmpty()) {
 			message += "<html>Insert meal name.<br>";
-			}
+		}
 		if (Integer.parseInt(primaryUnitInput.getText()) == 0) {
 			message += "<html>Amount of primary units must be a positive number.<br>";
 		}
-		if (calorieInput.getText().isEmpty()){
+		if (calorieInput.getText().isEmpty()) {
 			message += "Insert amount of calories.";
 		}
-		if (message.length()>0) {
+		if (message.length() > 0) {
 			JLabel info = new JLabel(message);
 			JOptionPane.showMessageDialog(frame, info);
 			return true;

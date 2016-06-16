@@ -40,7 +40,6 @@ public class Table {
 				System.out.println(result.getString("score") + " " + result.getString("name"));
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
