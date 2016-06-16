@@ -9,9 +9,10 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.text.ParseException;
 import java.util.Date;
-
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -19,7 +20,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
-
 import com.github.adkorzen.dietManager.Database;
 import com.github.adkorzen.dietManager.DateSetting;
 import com.github.adkorzen.dietManager.ManageDate;
@@ -35,8 +35,7 @@ public class MainMenu {
 	private SpinnerDateModel model;
 	private static JSpinner.DateEditor dateEditor;
 	private GridBagConstraints c;
-	private Database database;
-	private DateSetting dateSetting;
+	private JTextField spinnerTextField;
 
 	public void createAndShowGUI() {
 
@@ -84,8 +83,18 @@ public class MainMenu {
 		dateEditor = new JSpinner.DateEditor(spinner, "dd-MM-yyyy");
 		spinner.setEditor(dateEditor);
 		dateEditor.getTextField().setHorizontalAlignment(SwingConstants.CENTER);
+		spinnerTextField = (JTextField) dateEditor.getTextField();
 		setGUIConstraints(c, 0, 2, 3, 1, 1.0, 0.3, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(spinner, c);
+
+		spinnerTextField.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if ((c < '0' || c > '9') && c != KeyEvent.VK_BACK_SPACE) {
+					e.consume();
+				}
+			}
+		});
 
 		confirmButton = new JButton("Confirm");
 		confirmButton.addActionListener(new ButtonListener());

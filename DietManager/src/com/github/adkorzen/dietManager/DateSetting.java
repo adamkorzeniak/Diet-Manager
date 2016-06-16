@@ -11,6 +11,7 @@ import com.github.adkorzen.dietManager.GUI.MainMenu;
 public class DateSetting {
 	
 	public static void openCalendar() {
+		ManageDate.setDate((Date)MainMenu.getSpinerEditor().getValue());
 		if (CalendarView.getCallFrom() == Menu.DayMenu){
 			DayMenu.getFrame().setEnabled(false);
 		} else {
