@@ -13,6 +13,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Locale;
+
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -21,7 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
 
-import com.github.adkorzen.dietManager.DataManagement;
+import com.github.adkorzen.dietManager.DatabaseManagement;
 import com.github.adkorzen.dietManager.Database;
 import com.github.adkorzen.dietManager.DateSetting;
 import com.github.adkorzen.dietManager.ManageDate;
@@ -141,7 +143,8 @@ public class MainMenu {
 	}
 
 	public static void main(String[] args) {
-		DataManagement.getInstance().createTables();
+		Locale.setDefault(Locale.US);
+		DatabaseManagement.getInstance().createTables();
 		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {

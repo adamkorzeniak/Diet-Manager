@@ -18,7 +18,7 @@ public class Product {
 	private TreeMap secondaryUnits;
 	
 	public Product(String name, AddToDatabaseMenu.UNITS primaryUnit, int unitDivider, double caloriesPerUnit, double carbs, double proteins, double fats) {
-		this.name = name;
+		this.name = name.toLowerCase();
 		this.primaryUnit = primaryUnit;
 		this.unitDivider = unitDivider;
 		this.caloriesPerUnit = caloriesPerUnit;
@@ -39,6 +39,29 @@ public class Product {
 		}
 		return result;
 	}
+	
+	public String getName() {
+		return name;
+	}
+	public UNITS getPrimaryUnit() {
+		return primaryUnit;
+	}
+	public int getUnitDivider() {
+		return unitDivider;
+	}
+	public double getCaloriesPerUnit() {
+		return caloriesPerUnit;
+	}
+	public double getCarbs() {
+		return carbs;
+	}
+	public double getProteins() {
+		return proteins;
+	}
+	public double getFats() {
+		return fats;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

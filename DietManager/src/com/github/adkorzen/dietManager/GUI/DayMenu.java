@@ -16,7 +16,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.github.adkorzen.dietManager.DataManagement;
+import com.github.adkorzen.dietManager.DatabaseManagement;
 import com.github.adkorzen.dietManager.DateSetting;
 import com.github.adkorzen.dietManager.ManageDate;
 import com.github.adkorzen.dietManager.Tables;
@@ -48,7 +48,7 @@ public class DayMenu {
 		northPanel.add(dayForward, BorderLayout.LINE_END);
 		
 		Table.createTable();
-		DataManagement.getInstance().accessDatabase();
+		DatabaseManagement.getInstance().accessDatabase();
 		frame.getContentPane().add(Table.table);
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

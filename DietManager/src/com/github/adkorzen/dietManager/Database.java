@@ -39,6 +39,7 @@ public class Database {
 			System.out.println("already there\n");
 			System.out.println(ProductList.getList());
 		} else {
+			DatabaseManagement.getInstance().addProductToDatabase(product);
 			ProductList.addProduct(product);
 			System.out.println(ProductList.getList());
 		}

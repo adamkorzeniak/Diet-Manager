@@ -10,9 +10,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class DataManagement {
+public class DatabaseManagement {
 
-	private static DataManagement instance = null;
+	private static DatabaseManagement instance = null;
 	private String host, database, login, password;
 	{
 		try {
@@ -29,12 +29,12 @@ public class DataManagement {
 		}
 	}
 
-	private DataManagement() {
+	private DatabaseManagement() {
 	}
 
-	public static DataManagement getInstance() {
+	public static DatabaseManagement getInstance() {
 		if (instance == null) {
-			instance = new DataManagement();
+			instance = new DatabaseManagement();
 		}
 		return instance;
 	}
@@ -125,6 +125,21 @@ public class DataManagement {
 				PreparedStatement statement = con.prepareStatement(s + c1 + c2 + c3 + end);
 				statement.executeUpdate();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void addProductToDatabase(Product p) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
+					password);
+			String s = String.format("INSERT INTO meal VALUES ('%s', %d, '%s', %f, %f, %f, %f)", p.getName(), p.getUnitDivider(), p.getPrimaryUnit(), p.getCaloriesPerUnit(), p.getCarbs(),p.getProteins(), p.getFats());
+			System.out.println(s);
+			PreparedStatement statement = con.prepareStatement(s);
+			statement.executeUpdate();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
