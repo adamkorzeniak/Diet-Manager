@@ -43,7 +43,7 @@ public class EditDatabaseMenu {
 
 	public static void createAndShowGUI() {
 		MainMenu.getFrame().setVisible(false);
-		frame = new JFrame("Add to database");
+		frame = new JFrame("Edit database");
 		frame.getContentPane().setLayout(new GridBagLayout());
 		c = new GridBagConstraints();
 		

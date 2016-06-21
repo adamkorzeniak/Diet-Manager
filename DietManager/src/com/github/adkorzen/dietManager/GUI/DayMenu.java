@@ -1,8 +1,12 @@
 package com.github.adkorzen.dietManager.GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -12,13 +16,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.github.adkorzen.dietManager.DataManagement;
 import com.github.adkorzen.dietManager.DateSetting;
 import com.github.adkorzen.dietManager.ManageDate;
+import com.github.adkorzen.dietManager.Tables;
 import com.github.adkorzen.dietManager.GUI.CalendarView.Menu;
 
 public class DayMenu {
 	private static JFrame frame;
 	private JPanel northPanel;
+	private int monitorWidth, monitorHeight;
 	private static JButton dayBack, dayForward, datePicked;
 	private static DateFormat df;
 
@@ -41,11 +48,22 @@ public class DayMenu {
 		northPanel.add(dayForward, BorderLayout.LINE_END);
 		
 		Table.createTable();
-		Table.accessDatabase();
+		DataManagement.getInstance().accessDatabase();
 		frame.getContentPane().add(Table.table);
 
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		monitorWidth = (int) screenSize.getWidth();
+		monitorHeight = (int) screenSize.getHeight();
+		frame.setLocation((monitorWidth - 500) / 2, (monitorHeight - 550) / 2);
 		frame.setSize(500, 500);
+		frame.setResizable(false);
 		frame.setVisible(true);
+
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				MainMenu.getFrame().setVisible(true);
+			}
+		});
 	}
 
 	public class DateButtonListener implements ActionListener {

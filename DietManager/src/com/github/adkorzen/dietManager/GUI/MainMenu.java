@@ -20,6 +20,8 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SwingConstants;
+
+import com.github.adkorzen.dietManager.DataManagement;
 import com.github.adkorzen.dietManager.Database;
 import com.github.adkorzen.dietManager.DateSetting;
 import com.github.adkorzen.dietManager.ManageDate;
@@ -139,6 +141,8 @@ public class MainMenu {
 	}
 
 	public static void main(String[] args) {
+		DataManagement.getInstance().createTables();
+		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				new MainMenu().createAndShowGUI();

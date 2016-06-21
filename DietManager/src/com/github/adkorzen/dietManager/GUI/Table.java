@@ -20,27 +20,4 @@ public class Table {
 		table.setEnabled(false);
 	}
 
-	public static void accessDatabase() {
-
-		// Accessing Driver from JAR File
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-
-			// Creating variable for connection
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/demo?autoReconnect=true&useSSL=false", "root", null);
-
-			// Creating a query
-			
-			PreparedStatement statement = con.prepareStatement("SELECT * FROM scores");
-
-			// Create variable to execute query
-			ResultSet result = statement.executeQuery();
-
-			while (result.next()) {
-				System.out.println(result.getString("score") + " " + result.getString("name"));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

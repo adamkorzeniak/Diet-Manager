@@ -3,6 +3,7 @@ package com.github.adkorzen.dietManager;
 import java.util.Date;
 
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu;
+import com.github.adkorzen.dietManager.GUI.CheckDatabaseMenu;
 import com.github.adkorzen.dietManager.GUI.DayMenu;
 import com.github.adkorzen.dietManager.GUI.EditDatabaseMenu;
 import com.github.adkorzen.dietManager.GUI.MainMenu;
@@ -18,7 +19,7 @@ public class Database {
 	}
 
 	public static void checkDatabase() {
-		System.out.println("database checked");
+		CheckDatabaseMenu.createAndShowGUI();
 	}
 
 	public static void proceed() {
