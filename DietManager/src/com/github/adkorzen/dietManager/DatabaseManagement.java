@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.UNITS;
+
 public class DatabaseManagement {
 
 	private static DatabaseManagement instance = null;
@@ -145,21 +147,26 @@ public class DatabaseManagement {
 		}
 	}
 
-	public void accessDatabase() {
+	public void searchMealTable(String search) {
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
 					password);
-			PreparedStatement statement = con.prepareStatement("SELECT * FROM " + "MEAL");
+			PreparedStatement statement = con.prepareStatement("SELECT * FROM Meal WHERE name LIKE '%" + search + "%'");
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
-				System.out.println(result.getString("score") + " " + result.getString("name"));
+				System.out.println(result.getString(1) + " " + result.getString(2) + " " + result.getString(3) + " " + result.getString(4) + " " + result.getString(5) + " " + result.getString(6) + " " + result.getString(7));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public Product getProduct() {
+//		
+		return new Product("s", UNITS.gram, 100, 200);
 	}
 
 }

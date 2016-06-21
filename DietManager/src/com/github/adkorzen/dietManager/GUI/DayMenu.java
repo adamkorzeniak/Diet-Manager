@@ -48,7 +48,6 @@ public class DayMenu {
 		northPanel.add(dayForward, BorderLayout.LINE_END);
 		
 		Table.createTable();
-		DatabaseManagement.getInstance().accessDatabase();
 		frame.getContentPane().add(Table.table);
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

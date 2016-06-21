@@ -16,13 +16,16 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
+import com.github.adkorzen.dietManager.DatabaseManagement;
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.UNITS;
 
 public class EditDatabaseMenu {
@@ -33,7 +36,7 @@ public class EditDatabaseMenu {
 	private static int monitorHeight, monitorWidth;
 	private static JTextField mealNameInput;
 	private static JTextField caloriesPerUnit, carbsAmount, proteinsAmount, fatsAmount;
-	private static JTextArea mealList;
+	private static JList mealList;
 	private static JButton searchButton, newUnitButton;
 	private static JScrollPane scroll;
 	private static JComboBox unitType;
@@ -58,9 +61,12 @@ public class EditDatabaseMenu {
 		searchButton = new JButton("Search");
 		setGUIConstraints(c, 2, 0, 0.2, 1.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(searchButton, c);
+		searchButton.addActionListener(new ButtonListener());
 		
-		mealList = new JTextArea();
-		mealList.setEditable(false);
+		mealList = new JList();
+		mealList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		mealList.setLayoutOrientation(JList.VERTICAL);
+//		mealList.setListData(list);
 		scroll = new JScrollPane(mealList);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		setGUIConstraints(c, 1, 1, 2.0 , 10.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
@@ -149,6 +155,10 @@ public class EditDatabaseMenu {
 	private static class ButtonListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
+			if (e.getSource().equals(searchButton)) {
+				String search = mealNameInput.getText();
+				DatabaseManagement.getInstance().searchMealTable(search);
+			}
 		}
 		
 	}

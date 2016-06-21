@@ -19,5 +19,7 @@ public class Table {
 		table = new JTable(data, columnNames);
 		table.setEnabled(false);
 	}
+	
+	
 
 }

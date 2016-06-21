@@ -14,9 +14,11 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
@@ -29,7 +31,7 @@ public class CheckDatabaseMenu {
 	private static JButton filterButton, editButton;
 	private static int monitorWidth, monitorHeight;
 	private static JComboBox unitType;
-	private static JTextArea mealList;
+	private static JList mealList;
 	private static JScrollPane scroll;
 	private static JLabel unitLabel;
 	private static JLabel calorieLabel, carbsLabel, proteinsLabel, fatsLabel;
@@ -53,8 +55,12 @@ public class CheckDatabaseMenu {
 		setGUIConstraints(c, 2, 0, 0.1, 0.1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(editButton, c);
 		
-		mealList = new JTextArea();
-		mealList.setEditable(false);
+
+		
+		mealList = new JList();
+		mealList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		mealList.setLayoutOrientation(JList.VERTICAL);
+//		mealList.setListData(list);
 		scroll = new JScrollPane(mealList);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		setGUIConstraints(c, 0, 1, 3, 1, 1.0 , 3.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
