@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.UNITS;
+import com.github.adkorzen.dietManager.GUI.EditDatabaseMenu;
 
 public class DatabaseManagement {
 
@@ -78,7 +79,7 @@ public class DatabaseManagement {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void createSecondaryUnitsTable(Connection con, DatabaseMetaData dbm) {
 		try {
 			ResultSet tables = dbm.getTables(null, null, "secondary_units", null);
@@ -131,13 +132,15 @@ public class DatabaseManagement {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void addProductToDatabase(Product p) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
 					password);
-			String s = String.format("INSERT INTO meal VALUES ('%s', %d, '%s', %f, %f, %f, %f)", p.getName(), p.getUnitDivider(), p.getPrimaryUnit(), p.getCaloriesPerUnit(), p.getCarbs(),p.getProteins(), p.getFats());
+			String s = String.format("INSERT INTO meal VALUES ('%s', %d, '%s', %f, %f, %f, %f)", p.getName(),
+					p.getUnitDivider(), p.getPrimaryUnit(), p.getCaloriesPerUnit(), p.getCarbs(), p.getProteins(),
+					p.getFats());
 			System.out.println(s);
 			PreparedStatement statement = con.prepareStatement(s);
 			statement.executeUpdate();
@@ -150,23 +153,47 @@ public class DatabaseManagement {
 	public void searchMealTable(String search) {
 
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
 					password);
 			PreparedStatement statement = con.prepareStatement("SELECT * FROM Meal WHERE name LIKE '%" + search + "%'");
 			ResultSet result = statement.executeQuery();
+			EditDatabaseMenu.getListModel().clear();
 
 			while (result.next()) {
-				System.out.println(result.getString(1) + " " + result.getString(2) + " " + result.getString(3) + " " + result.getString(4) + " " + result.getString(5) + " " + result.getString(6) + " " + result.getString(7));
+				EditDatabaseMenu.getListModel().addElement(result.getString(1));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public Product getProduct() {
-//		
-		return new Product("s", UNITS.gram, 100, 200);
+
+	public Product getProduct(String name) {
+		
+		int unitAmount = 0, calories = 0;
+		double carbs = 0, proteins = 0, fats = 0;
+		UNITS units = UNITS.gram;
+
+		try {
+			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
+					password);
+			PreparedStatement statement = con.prepareStatement(String.format("SELECT * FROM Meal WHERE name = '%s'", name));
+			ResultSet result = statement.executeQuery();
+			
+			result.next();
+			unitAmount = result.getInt(2);
+			String u = result.getString(3);
+			units = UNITS.valueOf(u);
+			calories = result.getInt(4);
+			carbs = result.getDouble(5);
+			proteins = result.getDouble(6);
+			fats = result.getDouble(7);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new Product(name, units, unitAmount, calories, carbs, proteins, fats);
+
 	}
 
 }

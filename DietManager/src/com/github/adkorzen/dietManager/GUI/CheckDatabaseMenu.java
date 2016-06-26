@@ -60,7 +60,6 @@ public class CheckDatabaseMenu {
 		mealList = new JList();
 		mealList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		mealList.setLayoutOrientation(JList.VERTICAL);
-//		mealList.setListData(list);
 		scroll = new JScrollPane(mealList);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		setGUIConstraints(c, 0, 1, 3, 1, 1.0 , 3.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));

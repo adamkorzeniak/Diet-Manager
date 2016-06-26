@@ -232,7 +232,9 @@ public class AddToDatabaseMenu {
 	}
 
 	public enum UNITS {
-		gram, mililitr
+		gram, 
+		mililitr;
+		
 	}
 
 	private static class ButtonListener implements ActionListener {
