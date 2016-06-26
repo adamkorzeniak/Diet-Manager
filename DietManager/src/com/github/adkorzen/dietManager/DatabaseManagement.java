@@ -168,7 +168,6 @@ public class DatabaseManagement {
 	}
 
 	public Product getProduct(String name) {
-		
 		int unitAmount = 0, calories = 0;
 		double carbs = 0, proteins = 0, fats = 0;
 		UNITS units = UNITS.gram;
@@ -176,9 +175,10 @@ public class DatabaseManagement {
 		try {
 			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
 					password);
-			PreparedStatement statement = con.prepareStatement(String.format("SELECT * FROM Meal WHERE name = '%s'", name));
+			PreparedStatement statement = con
+					.prepareStatement(String.format("SELECT * FROM Meal WHERE name = '%s'", name));
 			ResultSet result = statement.executeQuery();
-			
+
 			result.next();
 			unitAmount = result.getInt(2);
 			String u = result.getString(3);
@@ -187,13 +187,27 @@ public class DatabaseManagement {
 			carbs = result.getDouble(5);
 			proteins = result.getDouble(6);
 			fats = result.getDouble(7);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return new Product(name, units, unitAmount, calories, carbs, proteins, fats);
-
 	}
 
+	public void saveProduct(Product p) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
+					password);
+			String s = String.format(
+					"UPDATE meal SET Unit_amount = %d, Primary_unit = '%s', Calories = %f, Carbs = %f, Proteins = %f, Fats = %f WHERE name = '%s'",
+					p.getUnitDivider(), p.getPrimaryUnit(), p.getCaloriesPerUnit(), p.getCarbs(),
+					p.getProteins(), p.getFats(), p.getName());
+			PreparedStatement statement = con.prepareStatement(s);
+			statement.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

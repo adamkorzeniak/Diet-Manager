@@ -43,7 +43,7 @@ public class EditDatabaseMenu {
 	private static JLabel calorieLabel, carbsLabel, proteinsLabel, fatsLabel;
 	private static int monitorHeight, monitorWidth;
 	private static JTextField mealNameInput;
-	private static JFormattedTextField caloriesPerUnit, carbsAmount, proteinsAmount, fatsAmount;
+	private static JFormattedTextField unitAmount, caloriesPerUnit, carbsAmount, proteinsAmount, fatsAmount;
 	private static JList mealList;
 	private static JButton searchButton, newUnitButton;
 	private static JScrollPane scroll;
@@ -66,11 +66,11 @@ public class EditDatabaseMenu {
 		frame.add(mealNameLabel, c);
 
 		mealNameInput = new JTextField();
-		setGUIConstraints(c, 1, 0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		setGUIConstraints(c, 1, 0, 2, 1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(mealNameInput, c);
 
 		searchButton = new JButton("Search");
-		setGUIConstraints(c, 2, 0, 0.2, 1.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		setGUIConstraints(c, 3, 0, 0.2, 1.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(searchButton, c);
 		searchButton.addActionListener(new ButtonListener());
 
@@ -80,7 +80,7 @@ public class EditDatabaseMenu {
 		mealList.setLayoutOrientation(JList.VERTICAL);
 		scroll = new JScrollPane(mealList);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		setGUIConstraints(c, 1, 1, 2.0, 10.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		setGUIConstraints(c, 1, 1, 2, 1, 2.0, 10.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		selectionModel = mealList.getSelectionModel();
 		selectionModel.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
@@ -94,6 +94,8 @@ public class EditDatabaseMenu {
 					} else {
 						unitType.setSelectedIndex(1);
 					}
+					unitAmount.setValue(p.getUnitDivider());
+					unitAmount.setEditable(true);
 					caloriesPerUnit.setValue(p.getCaloriesPerUnit());
 					caloriesPerUnit.setEditable(true);
 					carbsAmount.setValue(p.getCarbs());
@@ -112,13 +114,24 @@ public class EditDatabaseMenu {
 		setGUIConstraints(c, 0, 2, 0.2, 1.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(unitLabel, c);
 
+		unitAmount = new JFormattedTextField();
+		unitAmount.setHorizontalAlignment(SwingConstants.CENTER);
+		unitAmount.setEditable(false);
+		unitAmount.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				NumberListener.integerListener(unitAmount, e, 9999);
+			}
+		});
+		setGUIConstraints(c, 1, 2, 0.5, 1.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		frame.add(unitAmount, c);
+
 		unitType = new JComboBox(UNITS.values());
 		((JLabel) unitType.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-		setGUIConstraints(c, 1, 2, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		setGUIConstraints(c, 2, 2, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(unitType, c);
 
 		newUnitButton = new JButton("New Unit");
-		setGUIConstraints(c, 2, 2, 0.2, 1.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		setGUIConstraints(c, 3, 2, 0.2, 1.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(newUnitButton, c);
 
 		calorieLabel = new JLabel("Calories per Unit:");
@@ -133,7 +146,7 @@ public class EditDatabaseMenu {
 				NumberListener.integerListener(caloriesPerUnit, e, 99999999);
 			}
 		});
-		setGUIConstraints(c, 1, 3, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		setGUIConstraints(c, 1, 3, 2, 1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(caloriesPerUnit, c);
 
 		carbsLabel = new JLabel("Carbs per gram:");
@@ -148,7 +161,7 @@ public class EditDatabaseMenu {
 				NumberListener.doubleListener(carbsAmount, e, 9999);
 			}
 		});
-		setGUIConstraints(c, 1, 4, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		setGUIConstraints(c, 1, 4, 2, 1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(carbsAmount, c);
 
 		proteinsLabel = new JLabel("Proteins per gram:");
@@ -163,7 +176,7 @@ public class EditDatabaseMenu {
 				NumberListener.doubleListener(proteinsAmount, e, 9999);
 			}
 		});
-		setGUIConstraints(c, 1, 5, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		setGUIConstraints(c, 1, 5, 2, 1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(proteinsAmount, c);
 
 		fatsLabel = new JLabel("Fats per gram:");
@@ -178,12 +191,12 @@ public class EditDatabaseMenu {
 				NumberListener.doubleListener(fatsAmount, e, 9999);
 			}
 		});
-		setGUIConstraints(c, 1, 6, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		setGUIConstraints(c, 1, 6, 2, 1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(fatsAmount, c);
 
 		south = new JPanel();
 		south.setLayout(new GridBagLayout());
-		setGUIConstraints(c, 0, 7, 3, 3, 2.0, 3.0, GridBagConstraints.BOTH, new Insets(30, 0, 10, 0));
+		setGUIConstraints(c, 0, 7, 4, 3, 2.0, 3.0, GridBagConstraints.BOTH, new Insets(30, 0, 10, 0));
 		frame.add(south, c);
 
 		saveButton = new JButton("Save");
@@ -222,7 +235,15 @@ public class EditDatabaseMenu {
 				DatabaseManagement.getInstance().searchMealTable(search);
 				searching = false;
 			} else if (e.getSource().equals(saveButton)) {
-				// DatabaseManagement.getInstance().saveProduct();
+				if (!selectionModel.isSelectionEmpty()) {
+					int index = selectionModel.getAnchorSelectionIndex();
+					String name = listModel.get(index);
+					System.out.println(caloriesPerUnit.getValue());
+					Product p = new Product(name, (UNITS) unitType.getSelectedItem(), (int) unitAmount.getValue(),
+							(double) caloriesPerUnit.getValue(), (double) carbsAmount.getValue(),
+							(double) proteinsAmount.getValue(), (double) fatsAmount.getValue());
+					DatabaseManagement.getInstance().saveProduct(p);
+				}
 			} else if (e.getSource().equals(closeButton)) {
 				frame.dispose();
 				MainMenu.getFrame().setVisible(true);
