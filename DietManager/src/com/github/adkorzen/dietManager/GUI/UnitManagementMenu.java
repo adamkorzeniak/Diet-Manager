@@ -44,7 +44,7 @@ import com.github.adkorzen.dietManager.Listener.NumberListener;
 
 public class UnitManagementMenu {
 
-	private static String unitName = "";
+	private static String newName, unitName = "";
 	private static JFrame frame;
 	private static int monitorWidth, monitorHeight;
 	private static JLabel mealNameLabel, mealLabel, primaryUnitLabel, unitLabel, unitLabel2, relationLabel,
@@ -94,12 +94,18 @@ public class UnitManagementMenu {
 		selectionModel = mealList.getSelectionModel();
 		selectionModel.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
-				if (!refreshing){
-				int index = selectionModel.getAnchorSelectionIndex();
-				unitName = listModel.get(index);
-				String text = String.format("1 %s =", unitName);
-				relationUnitLabel.setText(text);
-				unitTextField.setEditable(true);}
+				if (!refreshing) {
+					int index = selectionModel.getAnchorSelectionIndex();
+					unitName = listModel.get(index);
+					String text = String.format("1 %s =", unitName);
+					relationUnitLabel.setText(text);
+					if (unitName != newName) {
+						Integer value = DatabaseManagement.getInstance().getSecondaryUnitMultiplier(p, unitName);
+						unitTextField.setText(value.toString());
+						unitTextField.setEditable(true);
+					} else
+						unitTextField.setText("0");
+				}
 			}
 		});
 		frame.add(scroll, c);
@@ -151,7 +157,7 @@ public class UnitManagementMenu {
 		closeButton.addActionListener(new ButtonListener());
 		setGUIConstraints(c, 0, 1, GridBagConstraints.BOTH, new Insets(10, 100, 10, 100));
 		south.add(closeButton, c);
-		
+
 		DatabaseManagement.getInstance().searchSecondaryUnitTable(p);
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -169,7 +175,7 @@ public class UnitManagementMenu {
 	}
 
 	private static class ButtonListener implements ActionListener {
-		
+
 		public void actionPerformed(ActionEvent e) {
 			refreshing = true;
 			if (e.getSource().equals(newButton)) {
@@ -182,13 +188,16 @@ public class UnitManagementMenu {
 					public void propertyChange(PropertyChangeEvent evt) {
 						if (name.getText().length() > 0) {
 							unitName = name.getText();
+							newName = unitName;
 							getListModel().addElement(unitName);
 							String text = String.format("1 %s =", unitName);
 							relationUnitLabel.setText(text);
 							unitTextField.setEditable(true);
-							mealList.setSelectedIndex(mealList.getComponentCount());
+							int index = listModel.size();
+							mealList.setSelectedIndex(index - 1);
 						} else {
 							unitName = "";
+							newName = "";
 							relationUnitLabel.setText(unitName);
 							unitTextField.setEditable(false);
 						}
@@ -202,21 +211,29 @@ public class UnitManagementMenu {
 				unitTextField.setEditable(false);
 				DatabaseManagement.getInstance().deleteSecondaryUnit(p, unitName);
 				DatabaseManagement.getInstance().searchSecondaryUnitTable(p);
+				newName = "";
 
 			} else if (e.getSource().equals(closeButton)) {
 				EditDatabaseMenu.getFrame().setEnabled(true);
 				frame.dispose();
+				newName = "";
 			} else if (e.getSource().equals(saveButton)) {
 				if (unitTextField.getText().length() > 0 && unitName.length() > 0) {
 					int amount = Integer.parseInt(unitTextField.getText());
-					DatabaseManagement.getInstance().addSecondaryUnit(p, unitName, amount);
-					DatabaseManagement.getInstance().searchSecondaryUnitTable(p);
+					if (amount > 0) {
+						DatabaseManagement.getInstance().addSecondaryUnit(p, unitName, amount);
+						DatabaseManagement.getInstance().searchSecondaryUnitTable(p);
+					} else {
+						JOptionPane.showMessageDialog(frame, "Value has to be greater than zero");
+					}
+					newName = "";
 				}
-			}
-			refreshing = false;
-		}
+				
+			}refreshing = false;
 
+		}	
 	}
+
 	public static DefaultListModel<String> getListModel() {
 		return listModel;
 	}

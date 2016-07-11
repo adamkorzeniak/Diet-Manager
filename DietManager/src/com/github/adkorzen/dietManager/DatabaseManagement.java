@@ -217,13 +217,22 @@ public class DatabaseManagement {
 			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
 					password);
 			String s = String.format(
-					"DELETE FROM secondary_units WHERE Meal_Name = '%s' AND Unit_Name = '%s'", p.getName(), string);
+					"SELECT Count(Unit_name) FROM Secondary_Units WHERE unit_name = '%s'", string);
+			PreparedStatement statement = con.prepareStatement(s);
+			ResultSet result = statement.executeQuery();
+			result.next();
+			if (result.getInt(1) == 0) {
 			String s1 = String.format(
 					"INSERT INTO secondary_units VALUES ('%s', '%s', %d)", p.getName(), string, amount);
-			PreparedStatement statement = con.prepareStatement(s);
 			PreparedStatement statement1 = con.prepareStatement(s1);
-			statement.executeUpdate();
-			statement1.executeUpdate();
+			statement1.executeUpdate();}
+			else {
+				String s1 = String.format(
+						"UPDATE Secondary_units SET Multiplier = %d WHERE Unit_name = '%s'", amount, string);
+;
+				PreparedStatement statement1 = con.prepareStatement(s1);
+				statement1.executeUpdate();
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -249,7 +258,6 @@ public class DatabaseManagement {
 	}
 	
 	public void searchSecondaryUnitTable(Product p) {
-
 		try {
 			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
 					password);
@@ -278,6 +286,22 @@ public class DatabaseManagement {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Integer getSecondaryUnitMultiplier(Product p, String unitName) {
+		int value = 0;
+		try {
+			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
+					password);
+			PreparedStatement statement = con.prepareStatement(String.format("SELECT * FROM Secondary_units WHERE Meal_name = '%s' AND unit_name = '%s'", p.getName(), unitName));
+			ResultSet result = statement.executeQuery();
+			result.next();
+			value = result.getInt(3);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return value;
 	}
 
 }
