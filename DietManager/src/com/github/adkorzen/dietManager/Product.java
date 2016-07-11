@@ -25,7 +25,6 @@ public class Product {
 		this.carbs = carbs;
 		this.proteins = proteins;
 		this.fats = fats;
-		System.out.println(this);
 	}
 	public Product (String name, UNITS primaryUnit, int unitDivider, double caloriesPerUnit) {
 		this(name, primaryUnit, unitDivider, caloriesPerUnit, 0.0, 0.0, 0.0);

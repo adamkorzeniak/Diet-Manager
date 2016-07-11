@@ -45,7 +45,7 @@ public class EditDatabaseMenu {
 	private static JTextField mealNameInput;
 	private static JFormattedTextField unitAmount, caloriesPerUnit, carbsAmount, proteinsAmount, fatsAmount;
 	private static JList mealList;
-	private static JButton searchButton, newUnitButton;
+	private static JButton searchButton, unitButton;
 	private static JScrollPane scroll;
 	private static JComboBox unitType;
 	private static JPanel south;
@@ -130,9 +130,10 @@ public class EditDatabaseMenu {
 		setGUIConstraints(c, 2, 2, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(unitType, c);
 
-		newUnitButton = new JButton("New Unit");
+		unitButton = new JButton("Manage Units");
+		unitButton.addActionListener(new ButtonListener());
 		setGUIConstraints(c, 3, 2, 0.2, 1.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
-		frame.add(newUnitButton, c);
+		frame.add(unitButton, c);
 
 		calorieLabel = new JLabel("Calories per Unit:");
 		setGUIConstraints(c, 0, 3, 0.2, 1.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
@@ -202,13 +203,11 @@ public class EditDatabaseMenu {
 		saveButton = new JButton("Save");
 		saveButton.addActionListener(new ButtonListener());
 		setGUIConstraints(c, 0, 0, 1.0, 2.0, GridBagConstraints.BOTH, new Insets(0, 50, 0, 50));
-		saveButton.addActionListener(new ButtonListener());
 		south.add(saveButton, c);
 
 		closeButton = new JButton("Close");
 		closeButton.addActionListener(new ButtonListener());
 		setGUIConstraints(c, 0, 1, GridBagConstraints.BOTH, new Insets(30, 200, 10, 200));
-		closeButton.addActionListener(new ButtonListener());
 		south.add(closeButton, c);
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -238,7 +237,6 @@ public class EditDatabaseMenu {
 				if (!selectionModel.isSelectionEmpty()) {
 					int index = selectionModel.getAnchorSelectionIndex();
 					String name = listModel.get(index);
-					System.out.println(caloriesPerUnit.getValue());
 					Product p = new Product(name, (UNITS) unitType.getSelectedItem(), (int) unitAmount.getValue(),
 							(double) caloriesPerUnit.getValue(), (double) carbsAmount.getValue(),
 							(double) proteinsAmount.getValue(), (double) fatsAmount.getValue());
@@ -247,11 +245,22 @@ public class EditDatabaseMenu {
 			} else if (e.getSource().equals(closeButton)) {
 				frame.dispose();
 				MainMenu.getFrame().setVisible(true);
+			} else if (e.getSource().equals(unitButton)) {
+				if (!selectionModel.isSelectionEmpty()) {
+					int index = selectionModel.getAnchorSelectionIndex();
+					String name = listModel.get(index);
+					frame.setEnabled(false);
+					UnitManagementMenu.createAndShowGUI(name);
+				}
 			}
 		}
 	}
 
 	public static DefaultListModel<String> getListModel() {
 		return listModel;
+	}
+
+	public static JFrame getFrame() {
+		return frame;
 	}
 }

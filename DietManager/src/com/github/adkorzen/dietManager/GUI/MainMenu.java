@@ -145,7 +145,6 @@ public class MainMenu {
 	public static void main(String[] args) {
 		Locale.setDefault(Locale.US);
 		DatabaseManagement.getInstance().createTables();
-		
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				new MainMenu().createAndShowGUI();

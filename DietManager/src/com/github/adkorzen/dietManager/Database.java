@@ -2,6 +2,8 @@ package com.github.adkorzen.dietManager;
 
 import java.util.Date;
 
+import javax.swing.JOptionPane;
+
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu;
 import com.github.adkorzen.dietManager.GUI.CheckDatabaseMenu;
 import com.github.adkorzen.dietManager.GUI.DayMenu;
@@ -35,13 +37,12 @@ public class Database {
 		} else {
 			product = new Product(getName(), getUnit(), getUnitDivider(), getCalories());
 		}
-		if (ProductList.getList().contains(product)) {
-			System.out.println("already there\n");
-			System.out.println(ProductList.getList());
-		} else {
+		if (!DatabaseManagement.getInstance().contains(product)) {
 			DatabaseManagement.getInstance().addProductToDatabase(product);
-			ProductList.addProduct(product);
-			System.out.println(ProductList.getList());
+			JOptionPane.showMessageDialog(null, "You added product to database");
+
+		} else {
+			JOptionPane.showMessageDialog(null, "There is already an product with this name in database");
 		}
 	}
 }

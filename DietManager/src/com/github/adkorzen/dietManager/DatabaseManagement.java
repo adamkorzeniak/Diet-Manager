@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.UNITS;
 import com.github.adkorzen.dietManager.GUI.EditDatabaseMenu;
+import com.github.adkorzen.dietManager.GUI.UnitManagementMenu;
 
 public class DatabaseManagement {
 
@@ -141,7 +142,6 @@ public class DatabaseManagement {
 			String s = String.format("INSERT INTO meal VALUES ('%s', %d, '%s', %f, %f, %f, %f)", p.getName(),
 					p.getUnitDivider(), p.getPrimaryUnit(), p.getCaloriesPerUnit(), p.getCarbs(), p.getProteins(),
 					p.getFats());
-			System.out.println(s);
 			PreparedStatement statement = con.prepareStatement(s);
 			statement.executeUpdate();
 
@@ -210,4 +210,74 @@ public class DatabaseManagement {
 			e.printStackTrace();
 		}
 	}
+	
+	public void addSecondaryUnit(Product p, String string, int amount) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
+					password);
+			String s = String.format(
+					"DELETE FROM secondary_units WHERE Meal_Name = '%s' AND Unit_Name = '%s'", p.getName(), string);
+			String s1 = String.format(
+					"INSERT INTO secondary_units VALUES ('%s', '%s', %d)", p.getName(), string, amount);
+			PreparedStatement statement = con.prepareStatement(s);
+			PreparedStatement statement1 = con.prepareStatement(s1);
+			statement.executeUpdate();
+			statement1.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean contains(Product p) {
+		try {
+			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
+					password);
+			PreparedStatement statement = con.prepareStatement(String.format("SELECT Count(name) FROM Meal WHERE name = '%s'", p.getName()));
+			ResultSet result = statement.executeQuery();
+			result.next();
+			int count = result.getInt(1);
+
+			if (count > 0) {
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public void searchSecondaryUnitTable(Product p) {
+
+		try {
+			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
+					password);
+			PreparedStatement statement = con.prepareStatement(String.format("SELECT * FROM Secondary_units WHERE Meal_name = '%s'", p.getName()));
+			ResultSet result = statement.executeQuery();
+			UnitManagementMenu.getListModel().clear();
+
+			while (result.next()) {
+				UnitManagementMenu.getListModel().addElement(result.getString(2));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteSecondaryUnit(Product p, String string) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
+					password);
+			String s = String.format(
+					"DELETE FROM secondary_units WHERE Meal_Name = '%s' AND Unit_Name = '%s'", p.getName(), string);
+			PreparedStatement statement = con.prepareStatement(s);
+			statement.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }
