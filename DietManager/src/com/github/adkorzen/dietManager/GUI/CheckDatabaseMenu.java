@@ -7,11 +7,17 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -21,8 +27,14 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+import com.github.adkorzen.dietManager.Database;
+import com.github.adkorzen.dietManager.DatabaseManagement;
+import com.github.adkorzen.dietManager.Product;
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.UNITS;
+import com.github.adkorzen.dietManager.Listener.NumberListener;
 
 public class CheckDatabaseMenu {
 	private static JFrame frame;
@@ -36,6 +48,10 @@ public class CheckDatabaseMenu {
 	private static JLabel unitLabel;
 	private static JLabel calorieLabel, carbsLabel, proteinsLabel, fatsLabel;
 	private static JTextField caloriesPerUnit, carbsAmount, proteinsAmount, fatsAmount;
+	private static DefaultListModel<String> listModel;
+	private static ListSelectionModel selectionModel;
+	private static boolean searching = false;
+	private static JFormattedTextField unitAmount;
 
 	public static void createAndShowGUI() {
 		MainMenu.getFrame().setVisible(false);
@@ -48,32 +64,59 @@ public class CheckDatabaseMenu {
 		frame.add(filterInput, c);
 
 		filterButton = new JButton("Filter");
+		filterButton.addActionListener(new ButtonListener());
 		setGUIConstraints(c, 1, 0, 0.3, 0.1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(filterButton, c);
 		
 		editButton = new JButton("Edit");
+		editButton.addActionListener(new ButtonListener());
 		setGUIConstraints(c, 2, 0, 0.1, 0.1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(editButton, c);
 		
-
-		
-		mealList = new JList();
+		listModel = new DefaultListModel<String>();
+		mealList = new JList(listModel);
 		mealList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 		mealList.setLayoutOrientation(JList.VERTICAL);
 		scroll = new JScrollPane(mealList);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		setGUIConstraints(c, 0, 1, 3, 1, 1.0 , 3.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		selectionModel = mealList.getSelectionModel();
+		selectionModel.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if (!searching) {
+					int index = selectionModel.getAnchorSelectionIndex();
+					String meal = listModel.get(index);
+					Product p = DatabaseManagement.getInstance().getProduct(meal);
+
+					if (p.getPrimaryUnit().equals(UNITS.gram)) {
+						unitType.setSelectedIndex(0);
+					} else {
+						unitType.setSelectedIndex(1);
+					}
+				}
+			}
+		});
 		frame.add(scroll, c);
 		
 		unitLabel = new JLabel("Unit:");
 		setGUIConstraints(c, 0, 2, 0.2, 0.1, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5));
 		frame.add(unitLabel, c);
 		
+		unitAmount = new JFormattedTextField();
+		unitAmount.setHorizontalAlignment(SwingConstants.CENTER);
+		unitAmount.setEditable(false);
+		unitAmount.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				NumberListener.integerListener(unitAmount, e, 9999);
+			}
+		});
+		setGUIConstraints(c, 1, 2, 0.1, 0.1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
+		frame.add(unitAmount, c);
+		
 		unitType = new JComboBox(UNITS.values());
 		((JLabel) unitType.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-		setGUIConstraints(c, 1, 2, 2, 1, 0.4, 0.1, GridBagConstraints.BOTH, new Insets(5, 5, 5, 10));
+		setGUIConstraints(c, 2, 2, 2, 1, 0.4, 0.1, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10));
 		frame.add(unitType, c);
-		
 		
 		calorieLabel = new JLabel("Calories per Unit:");
 		setGUIConstraints(c, 0, 3, 0.2, 0.1, GridBagConstraints.BOTH, new Insets(5, 5, 5, 5));
@@ -130,5 +173,25 @@ public class CheckDatabaseMenu {
 				MainMenu.getFrame().setVisible(true);
 			}
 		});
+	}
+	private static class ButtonListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent event) {
+			if (event.getSource().equals(filterButton)){
+				searching = true;
+				String search = filterInput.getText();
+				DatabaseManagement.getInstance().searchMealTable(listModel, search, false);
+				searching = false;
+			} else if (event.getSource().equals(editButton)) {
+				if  (selectionModel.getAnchorSelectionIndex() >= 0) {
+				int index = selectionModel.getAnchorSelectionIndex();
+				String name = listModel.get(index);
+				frame.dispose();
+				Database.editDatabase();
+				EditDatabaseMenu.setMealName(name);
+				DatabaseManagement.getInstance().searchMealTable(EditDatabaseMenu.getListModel(), name, true);
+			}}
+		}
+		
 	}
 }

@@ -231,7 +231,7 @@ public class EditDatabaseMenu {
 			if (e.getSource().equals(searchButton)) {
 				searching = true;
 				String search = mealNameInput.getText();
-				DatabaseManagement.getInstance().searchMealTable(listModel, search);
+				DatabaseManagement.getInstance().searchMealTable(listModel, search, false);
 				searching = false;
 			} else if (e.getSource().equals(saveButton)) {
 				if (!selectionModel.isSelectionEmpty()) {
@@ -262,5 +262,8 @@ public class EditDatabaseMenu {
 
 	public static JFrame getFrame() {
 		return frame;
+	}
+	public static void setMealName(String s) {
+		mealNameInput.setText(s);
 	}
 }
