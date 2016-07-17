@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import javax.swing.DefaultListModel;
+
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.UNITS;
 import com.github.adkorzen.dietManager.GUI.EditDatabaseMenu;
 import com.github.adkorzen.dietManager.GUI.UnitManagementMenu;
@@ -150,17 +152,17 @@ public class DatabaseManagement {
 		}
 	}
 
-	public void searchMealTable(String search) {
+	public void searchMealTable(DefaultListModel<String> listModel, String search) {
 
 		try {
 			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
 					password);
 			PreparedStatement statement = con.prepareStatement("SELECT * FROM Meal WHERE name LIKE '%" + search + "%'");
 			ResultSet result = statement.executeQuery();
-			EditDatabaseMenu.getListModel().clear();
+			listModel.clear();
 
 			while (result.next()) {
-				EditDatabaseMenu.getListModel().addElement(result.getString(1));
+				listModel.addElement(result.getString(1));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
