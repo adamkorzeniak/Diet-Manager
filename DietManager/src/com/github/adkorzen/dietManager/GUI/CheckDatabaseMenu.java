@@ -93,6 +93,13 @@ public class CheckDatabaseMenu {
 					} else {
 						unitType.setSelectedIndex(1);
 					}
+					
+					unitAmount.setText(Integer.toString(p.getUnitDivider()));
+					caloriesPerUnit.setText(Double.toString(p.getCaloriesPerUnit()));
+					carbsAmount.setText(Double.toString(p.getCarbs()));
+					proteinsAmount.setText(Double.toString(p.getProteins()));
+					fatsAmount.setText(Double.toString(p.getFats()));
+					
 				}
 			}
 		});
@@ -190,6 +197,7 @@ public class CheckDatabaseMenu {
 				Database.editDatabase();
 				EditDatabaseMenu.setMealName(name);
 				DatabaseManagement.getInstance().searchMealTable(EditDatabaseMenu.getListModel(), name, true);
+				EditDatabaseMenu.setSelection();
 			}}
 		}
 		

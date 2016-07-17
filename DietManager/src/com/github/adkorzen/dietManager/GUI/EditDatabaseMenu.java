@@ -266,4 +266,7 @@ public class EditDatabaseMenu {
 	public static void setMealName(String s) {
 		mealNameInput.setText(s);
 	}
+	public static void setSelection() {
+		mealList.setSelectedIndex(0);
+	}
 }
