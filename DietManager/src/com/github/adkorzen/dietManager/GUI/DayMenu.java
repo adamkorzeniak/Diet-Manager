@@ -10,24 +10,25 @@ import java.awt.event.WindowEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
-import com.github.adkorzen.dietManager.DatabaseManagement;
 import com.github.adkorzen.dietManager.DateSetting;
 import com.github.adkorzen.dietManager.ManageDate;
-import com.github.adkorzen.dietManager.Tables;
 import com.github.adkorzen.dietManager.GUI.CalendarView.Menu;
 
 public class DayMenu {
 	private static JFrame frame;
 	private JPanel northPanel;
 	private int monitorWidth, monitorHeight;
-	private static JButton dayBack, dayForward, datePicked;
+	private static JButton dayBack, dayForward, datePicked, addMeal;
 	private static DateFormat df;
+	private static JScrollPane scroll;
+	private static JTable table;
 
 	public void createAndShowGUI() {
 		MainMenu.getFrame().setVisible(false);
@@ -47,8 +48,12 @@ public class DayMenu {
 		northPanel.add(datePicked, BorderLayout.CENTER);
 		northPanel.add(dayForward, BorderLayout.LINE_END);
 		
-		Table.createTable();
-		frame.getContentPane().add(Table.table);
+		addMeal = new JButton("Add Meal");
+		frame.getContentPane().add(addMeal, BorderLayout.PAGE_END);
+		
+		table = new Table().getTable();
+		scroll = new JScrollPane(table);
+		frame.getContentPane().add(scroll);
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		monitorWidth = (int) screenSize.getWidth();
