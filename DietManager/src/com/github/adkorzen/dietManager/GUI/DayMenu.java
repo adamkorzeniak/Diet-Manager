@@ -21,20 +21,24 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 
+import com.github.adkorzen.dietManager.DatabaseManagement;
 import com.github.adkorzen.dietManager.DateSetting;
 import com.github.adkorzen.dietManager.ManageDate;
 import com.github.adkorzen.dietManager.GUI.CalendarView.Menu;
 
 public class DayMenu {
 	private static JFrame frame;
-	private JPanel northPanel, southPanel;
+	private static JPanel northPanel, southPanel;
 	private int monitorWidth, monitorHeight;
-	private GridBagConstraints c;
+	private static GridBagConstraints c;
+	private static ListSelectionModel selectionModel;
 	private static JButton dayBack, dayForward, datePicked, addMealButton, deleteButton, editButton;
 	private static DateFormat df;
 	private static JScrollPane scroll;
-	private static JTable table;
+	private static Table table;
 
 	public void createAndShowGUI() {
 		MainMenu.getFrame().setVisible(false);
@@ -60,21 +64,26 @@ public class DayMenu {
 		c = new GridBagConstraints();
 		
 		addMealButton = new JButton("Add Meal");
+		addMealButton.addActionListener(new ButtonListener());
 		setGUIConstraints(c, 0, 0, 2, 1, GridBagConstraints.BOTH, new Insets(0, 10, 0, 10));
 		southPanel.add(addMealButton, c);
 		
 		deleteButton = new JButton("Delete");
+		deleteButton.addActionListener(new ButtonListener());
 		setGUIConstraints(c, 0, 1, GridBagConstraints.BOTH, new Insets(10, 30, 10, 30));
 		southPanel.add(deleteButton, c);
 		
 		editButton = new JButton("Edit");
+		editButton.addActionListener(new ButtonListener());
 		setGUIConstraints(c, 1, 1, GridBagConstraints.BOTH, new Insets(10, 30, 10, 30));
 		southPanel.add(editButton, c);
 		
 		frame.add(southPanel, BorderLayout.PAGE_END);
 		
-		table = new Table().getTable();
+		table = new Table(ManageDate.getDate()).getTable();
 		scroll = new JScrollPane(table);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		selectionModel = table.getSelectionModel();
 		frame.getContentPane().add(scroll);
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -98,14 +107,30 @@ public class DayMenu {
 			if (e.getSource() == dayBack) {
 				ManageDate.add(Calendar.DAY_OF_MONTH, -1);
 				updateDate();
+				updateTable();
 			} else if (e.getSource() == dayForward) {
 				ManageDate.add(Calendar.DAY_OF_MONTH, 1);
 				updateDate();
+				updateTable();
 			} else if (e.getSource() == datePicked) {
 				CalendarView.setCallFrom(Menu.DayMenu);
 				DateSetting.openCalendar();
 			}
 		}
+	}
+	public class ButtonListener implements ActionListener {
+		
+		public void actionPerformed(ActionEvent e) {
+			if (e.getSource().equals(addMealButton)) {
+				new AddMealView().createView();
+				frame.setVisible(false);
+			} else if (e.getSource().equals(deleteButton) && selectionModel.getAnchorSelectionIndex() >= 0) {
+				int index = selectionModel.getAnchorSelectionIndex();
+				String mealName = "";
+//				DatabaseManagement.deleteMealEntry(mealName);
+			}
+		}
+		
 	}
 
 	public static void updateDate() {
@@ -114,5 +139,8 @@ public class DayMenu {
 
 	public static JFrame getFrame() {
 		return frame;
+	}
+	public static void updateTable() {
+		table = new Table(ManageDate.getDate());
 	}
 }

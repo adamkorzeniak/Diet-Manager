@@ -47,6 +47,7 @@ public class CalendarView {
 				if (CalendarView.getCallFrom() == Menu.DayMenu) {
 					DayMenu.getFrame().setEnabled(true);
 					DayMenu.updateDate();
+					DayMenu.updateTable();
 				} else {
 					MainMenu.getFrame().setEnabled(true);
 					MainMenu.getSpinerEditor().setValue(ManageDate.getDate());

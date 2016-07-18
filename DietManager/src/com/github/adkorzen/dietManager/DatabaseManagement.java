@@ -4,17 +4,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.security.KeyStore.ProtectionParameter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
 
+import com.github.adkorzen.dietManager.GUI.AddMealView;
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.UNITS;
-import com.github.adkorzen.dietManager.GUI.EditDatabaseMenu;
 import com.github.adkorzen.dietManager.GUI.UnitManagementMenu;
 
 public class DatabaseManagement {
@@ -174,6 +176,53 @@ public class DatabaseManagement {
 		}
 	}
 
+	public void searchMealTable(String search) {
+
+		try {
+			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
+					password);
+			statement = con.prepareStatement("SELECT * FROM Meal WHERE name LIKE '%" + search + "%'");
+			ResultSet result = statement.executeQuery();
+			ArrayList<String> list = new ArrayList<String>();
+
+			while (result.next()) {
+				list.add(result.getString(1));
+			}
+			String[] newArray = list.toArray(new String[list.size()]);
+			
+			JComboBox newCombo = new JComboBox(newArray);
+			AddMealView.setMealNameCombobox(newCombo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void searchSecondaryUnitTable(String search) {
+
+		try {
+			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
+					password);
+			statement = con.prepareStatement("SELECT * FROM Secondary_units WHERE Meal_name = '" + search + "'");
+			ResultSet result = statement.executeQuery();
+			ArrayList<String> list = new ArrayList<String>();
+			
+			PreparedStatement nextStatement = con.prepareStatement("SELECT * FROM Meal WHERE name = '" + search + "'");
+			ResultSet nextResult = nextStatement.executeQuery();
+			nextResult.next();
+			list.add(nextResult.getString(3));
+					
+			while (result.next()) {
+				list.add(result.getString(2));
+			}
+			String[] newArray = list.toArray(new String[list.size()]);
+			
+			JComboBox newCombo = new JComboBox(newArray);
+			AddMealView.setUnitNameCombobox(newCombo);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public Product getProduct(String name) {
 		int unitAmount = 0, calories = 0;
 		double carbs = 0, proteins = 0, fats = 0;

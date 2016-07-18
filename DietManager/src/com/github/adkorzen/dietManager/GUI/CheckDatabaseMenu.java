@@ -42,7 +42,7 @@ public class CheckDatabaseMenu {
 	private static JTextField filterInput;
 	private static JButton filterButton, editButton;
 	private static int monitorWidth, monitorHeight;
-	private static JComboBox unitType;
+	private static JTextField unitType;
 	private static JList mealList;
 	private static JScrollPane scroll;
 	private static JLabel unitLabel;
@@ -89,9 +89,9 @@ public class CheckDatabaseMenu {
 					Product p = DatabaseManagement.getInstance().getProduct(meal);
 
 					if (p.getPrimaryUnit().equals(UNITS.gram)) {
-						unitType.setSelectedIndex(0);
+						unitType.setText("gram");
 					} else {
-						unitType.setSelectedIndex(1);
+						unitType.setText("mililitr");
 					}
 					
 					unitAmount.setText(Integer.toString(p.getUnitDivider()));
@@ -120,8 +120,9 @@ public class CheckDatabaseMenu {
 		setGUIConstraints(c, 1, 2, 0.1, 0.1, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(unitAmount, c);
 		
-		unitType = new JComboBox(UNITS.values());
-		((JLabel) unitType.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+		unitType = new JTextField();
+		unitType.setEditable(false);
+		unitType.setHorizontalAlignment(SwingConstants.CENTER);
 		setGUIConstraints(c, 2, 2, 2, 1, 0.4, 0.1, GridBagConstraints.BOTH, new Insets(0, 0, 0, 10));
 		frame.add(unitType, c);
 		
