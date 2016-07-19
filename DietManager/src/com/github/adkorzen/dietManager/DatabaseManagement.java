@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
@@ -39,6 +41,13 @@ public class DatabaseManagement {
 		}
 	}
 
+	public Connection establishConnection() throws Exception {
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
+				password);
+		return con;
+	}
+
 	private DatabaseManagement() {
 	}
 
@@ -51,15 +60,12 @@ public class DatabaseManagement {
 
 	public void createTables() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
-					password);
+			Connection con = establishConnection();
 			DatabaseMetaData dbm = con.getMetaData();
 
 			createMealTable(con, dbm);
 			createSecondaryUnitsTable(con, dbm);
 			createCalendarTable(con, dbm);
-			createDaysTable(con, dbm);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -111,28 +117,12 @@ public class DatabaseManagement {
 			if (tables.next()) {
 			} else {
 				String s = "CREATE TABLE calendar (";
-				String c1 = "id INT PRIMARY KEY";
+				String c1 = "id INT PRIMARY KEY AUTO_INCREMENT";
 				String c2 = ",Date DATE";
+				String c3 = ",Name VARCHAR(255)";
+				String c4 = ",Amount INT";
 				String end = ")";
-				PreparedStatement statement = con.prepareStatement(s + c1 + c2 + end);
-				statement.executeUpdate();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void createDaysTable(Connection con, DatabaseMetaData dbm) {
-		try {
-			ResultSet tables = dbm.getTables(null, null, "days", null);
-			if (tables.next()) {
-			} else {
-				String s = "CREATE TABLE days (";
-				String c1 = "id INT";
-				String c2 = ",Name VARCHAR(255)";
-				String c3 = ",Amount INT";
-				String end = ")";
-				PreparedStatement statement = con.prepareStatement(s + c1 + c2 + c3 + end);
+				PreparedStatement statement = con.prepareStatement(s + c1 + c2 + c3 + c4 + end);
 				statement.executeUpdate();
 			}
 		} catch (Exception e) {
@@ -142,9 +132,7 @@ public class DatabaseManagement {
 
 	public void addProductToDatabase(Product p) {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
-					password);
+			Connection con = establishConnection();
 			String s = String.format("INSERT INTO meal VALUES ('%s', %d, '%s', %f, %f, %f, %f)", p.getName(),
 					p.getUnitDivider(), p.getPrimaryUnit(), p.getCaloriesPerUnit(), p.getCarbs(), p.getProteins(),
 					p.getFats());
@@ -159,8 +147,7 @@ public class DatabaseManagement {
 	public void searchMealTable(DefaultListModel<String> listModel, String search, boolean exactly) {
 
 		try {
-			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
-					password);
+			Connection con = establishConnection();
 			if (exactly)
 				statement = con.prepareStatement("SELECT * FROM Meal WHERE name = '" + search + "'");
 			else
@@ -179,8 +166,7 @@ public class DatabaseManagement {
 	public void searchMealTable(String search) {
 
 		try {
-			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
-					password);
+			Connection con = establishConnection();
 			statement = con.prepareStatement("SELECT * FROM Meal WHERE name LIKE '%" + search + "%'");
 			ResultSet result = statement.executeQuery();
 			ArrayList<String> list = new ArrayList<String>();
@@ -189,48 +175,46 @@ public class DatabaseManagement {
 				list.add(result.getString(1));
 			}
 			String[] newArray = list.toArray(new String[list.size()]);
-			
+
 			JComboBox newCombo = new JComboBox(newArray);
 			AddMealView.setMealNameCombobox(newCombo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void searchSecondaryUnitTable(String search) {
 
 		try {
-			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
-					password);
+			Connection con = establishConnection();
 			statement = con.prepareStatement("SELECT * FROM Secondary_units WHERE Meal_name = '" + search + "'");
 			ResultSet result = statement.executeQuery();
 			ArrayList<String> list = new ArrayList<String>();
-			
+
 			PreparedStatement nextStatement = con.prepareStatement("SELECT * FROM Meal WHERE name = '" + search + "'");
 			ResultSet nextResult = nextStatement.executeQuery();
-			nextResult.next();
-			list.add(nextResult.getString(3));
-					
+			if (nextResult.next()) {
+				list.add(nextResult.getString(3));
+			}
 			while (result.next()) {
 				list.add(result.getString(2));
 			}
 			String[] newArray = list.toArray(new String[list.size()]);
-			
+
 			JComboBox newCombo = new JComboBox(newArray);
 			AddMealView.setUnitNameCombobox(newCombo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Product getProduct(String name) {
 		int unitAmount = 0, calories = 0;
 		double carbs = 0, proteins = 0, fats = 0;
 		UNITS units = UNITS.gram;
 
 		try {
-			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
-					password);
+			Connection con = establishConnection();
 			PreparedStatement statement = con
 					.prepareStatement(String.format("SELECT * FROM Meal WHERE name = '%s'", name));
 			ResultSet result = statement.executeQuery();
@@ -252,9 +236,7 @@ public class DatabaseManagement {
 
 	public void saveProduct(Product p) {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
-					password);
+			Connection con = establishConnection();
 			String s = String.format(
 					"UPDATE meal SET Unit_amount = %d, Primary_unit = '%s', Calories = %f, Carbs = %f, Proteins = %f, Fats = %f WHERE name = '%s'",
 					p.getUnitDivider(), p.getPrimaryUnit(), p.getCaloriesPerUnit(), p.getCarbs(), p.getProteins(),
@@ -269,9 +251,7 @@ public class DatabaseManagement {
 
 	public void addSecondaryUnit(Product p, String string, int amount) {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
-					password);
+			Connection con = establishConnection();
 			String s = String.format("SELECT Count(Unit_name) FROM Secondary_Units WHERE unit_name = '%s'", string);
 			PreparedStatement statement = con.prepareStatement(s);
 			ResultSet result = statement.executeQuery();
@@ -296,8 +276,7 @@ public class DatabaseManagement {
 
 	public boolean contains(Product p) {
 		try {
-			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
-					password);
+			Connection con = establishConnection();
 			PreparedStatement statement = con
 					.prepareStatement(String.format("SELECT Count(name) FROM Meal WHERE name = '%s'", p.getName()));
 			ResultSet result = statement.executeQuery();
@@ -315,8 +294,7 @@ public class DatabaseManagement {
 
 	public void searchSecondaryUnitTable(Product p) {
 		try {
-			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
-					password);
+			Connection con = establishConnection();
 			PreparedStatement statement = con.prepareStatement(
 					String.format("SELECT * FROM Secondary_units WHERE Meal_name = '%s'", p.getName()));
 			ResultSet result = statement.executeQuery();
@@ -332,9 +310,7 @@ public class DatabaseManagement {
 
 	public void deleteSecondaryUnit(Product p, String string) {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
-					password);
+			Connection con = establishConnection();
 			String s = String.format("DELETE FROM secondary_units WHERE Meal_Name = '%s' AND Unit_Name = '%s'",
 					p.getName(), string);
 			PreparedStatement statement = con.prepareStatement(s);
@@ -348,8 +324,7 @@ public class DatabaseManagement {
 	public Integer getSecondaryUnitMultiplier(Product p, String unitName) {
 		int value = 0;
 		try {
-			Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
-					password);
+			Connection con = establishConnection();
 			PreparedStatement statement = con.prepareStatement(
 					String.format("SELECT * FROM Secondary_units WHERE Meal_name = '%s' AND unit_name = '%s'",
 							p.getName(), unitName));
@@ -361,6 +336,89 @@ public class DatabaseManagement {
 			e.printStackTrace();
 		}
 		return value;
+	}
+
+	public void addNewEntry(Date date, String name, int amount) {
+		try {
+			Connection con = establishConnection();
+			String d = Helper.dateToString(date);
+			String s = "INSERT INTO calendar (Date, Name, Amount) VALUES ('" + d + "', '" + name + "', '" + amount
+					+ "')";
+			System.out.println(s);
+			PreparedStatement statement = con.prepareStatement(s);
+			statement.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public int getCalories(String mealName) {
+		int value = 0;
+		try {
+			Connection con = establishConnection();
+			PreparedStatement statement = con.prepareStatement(
+					String.format("SELECT Calories FROM Meal WHERE Name = '%s'", mealName));
+			ResultSet result = statement.executeQuery();
+			result.next();
+			value = result.getInt(1);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return value;
+	}
+	
+	public int getCaloriesDivider(String mealName) {
+		int value = 0;
+		try {
+			Connection con = establishConnection();
+			PreparedStatement statement = con.prepareStatement(
+					String.format("SELECT Unit_amount FROM Meal WHERE Name = '%s'", mealName));
+			ResultSet result = statement.executeQuery();
+			result.next();
+			value = result.getInt(1);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return value;
+	}
+	
+	public int getMultiplier(String mealName, String unitName) {
+		int value = 0;
+		try {
+			Connection con = establishConnection();
+			PreparedStatement statement = con.prepareStatement(
+					String.format("SELECT Multiplier FROM Secondary_units WHERE Meal_name = '%s' AND Unit_Name = '%s'", mealName, unitName));
+			ResultSet result = statement.executeQuery();
+			result.next();
+			value = result.getInt(1);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return value;
+	}
+	
+	public boolean isPrimaryUnit(String mealName, String unitName) {
+		try {
+			Connection con = establishConnection();
+			PreparedStatement statement = con.prepareStatement(
+					String.format("SELECT Primary_Unit FROM Meal WHERE Name = '%s'", mealName));
+			ResultSet result = statement.executeQuery();
+			result.next();
+			String s = result.getString(1);
+			
+			if (s.equals(unitName)) return true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 }

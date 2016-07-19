@@ -6,6 +6,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import com.github.adkorzen.dietManager.DatabaseManagement;
+
 public class Table extends JTable {
 	private Table table;
 	private Date date;
@@ -50,6 +52,7 @@ public class Table extends JTable {
 	
 	public void setData() {
 		data = new String [1][5];
+//		DatabaseManagement.getInstance()s.getEntryData(date);
 		data[0][0] = "seven";
 		data[0][1] = "100";
 	}

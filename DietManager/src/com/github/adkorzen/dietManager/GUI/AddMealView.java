@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.invoke.ConstantCallSite;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -26,6 +27,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import com.github.adkorzen.dietManager.DatabaseManagement;
+import com.github.adkorzen.dietManager.Helper;
+import com.github.adkorzen.dietManager.ManageDate;
 import com.github.adkorzen.dietManager.Listener.NumberListener;
 
 public class AddMealView {
@@ -88,6 +91,19 @@ public class AddMealView {
 		panel.add(unitNames, c);
 		
 		addButton = new JButton("Add");
+		addButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				Date date = ManageDate.getDate();
+				String name = (String) mealNames.getSelectedItem();
+				String unit = (String) unitNames.getSelectedItem();
+				String stringAmount = amountField.getText();
+				int amount = Helper.calculateAmount(name, unit, stringAmount);
+				DatabaseManagement.getInstance().addNewEntry(date, name, amount);
+				frame.dispose();
+				DayMenu.getFrame().setVisible(true);
+			}
+		});
 		setGUIConstraints(c, 0, 4, 2, 1, GridBagConstraints.BOTH, new Insets(10,10,10,10));
 		panel.add(addButton, c);
 		
@@ -115,7 +131,6 @@ public class AddMealView {
 		setGUIConstraints(c, 0, 1, 2, 1, GridBagConstraints.BOTH, new Insets(10,10,10,10));
 		panel.add(mealNames, c);
 		DatabaseManagement.getInstance().searchSecondaryUnitTable((String)mealNames.getSelectedItem());
-		
 		SwingUtilities.updateComponentTreeUI(frame);
 	}
 	public static void setUnitNameCombobox(JComboBox combo) {
