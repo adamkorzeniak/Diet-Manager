@@ -421,4 +421,68 @@ public class DatabaseManagement {
 		return false;
 	}
 
+	public String[][] getEntryData(Date date) {
+		
+		String name, unit;
+		int amount;
+		double calories, carbs, proteins, fats, multiplier;
+		double sumOfCalories = 0, sumOfCarbs = 0, sumOfProteins = 0, sumOfFats = 0; 
+		
+		try {
+			Connection con = establishConnection();
+			String d = Helper.dateToString(date);
+			PreparedStatement statement = con.prepareStatement(
+					String.format(("SELECT c.name, c.amount, m.unit_amount, m.primary_unit, m.calories, m.carbs, m.proteins, m. fats FROM calendar AS c JOIN meal AS m ON c.name = m.name WHERE c.date = '%s'"), d));
+			ResultSet result = statement.executeQuery();
+			
+			PreparedStatement statementNext = con.prepareStatement(
+					String.format(("SELECT COUNT(*) FROM calendar JOIN meal ON calendar.name = meal.name WHERE calendar.date = '%s'"), d));
+			ResultSet resultNext = statementNext.executeQuery();
+			resultNext.next();
+			int rows = resultNext.getInt(1);
+			String [][] data = new String [rows + 1][5];
+			
+			int i = 0;
+			while (result.next()) {
+				
+				name = result.getString(1);
+				amount = result.getInt(2);
+				unit = result.getString(4);
+				multiplier = (double) amount / result.getInt(3);
+				calories = result.getInt(5) * multiplier;
+				carbs = result.getDouble(6) * multiplier;
+				proteins = result.getDouble(7) * multiplier;
+				fats = result.getDouble(8) * multiplier;
+				
+				sumOfCalories += calories;
+				sumOfCarbs += carbs;
+				sumOfProteins += proteins;
+				sumOfFats += fats;
+				
+				data[i][0] = Helper.getDescription(name, amount, unit);
+				data[i][1] = String.format("%.2f", carbs);
+				data[i][2] = String.format("%.2f", proteins);
+				data[i][3] = String.format("%.2f", fats);
+				data[i][4] = String.format("%.0f", calories);
+				
+				i++;
+				
+			}
+			
+			data[rows][0] = "RAZEM";
+			data[rows][1] = String.format("%.2f", sumOfCarbs);
+			data[rows][2] = String.format("%.2f", sumOfProteins);
+			data[rows][3] = String.format("%.2f", sumOfFats);
+			data[rows][4] = String.format("%.0f", sumOfCalories);
+			
+			return data;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new String [0][0];
+	}
+	
+	
+
 }

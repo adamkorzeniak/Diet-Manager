@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 
 import com.github.adkorzen.dietManager.DatabaseManagement;
 import com.github.adkorzen.dietManager.DateSetting;
@@ -84,7 +85,7 @@ public class DayMenu {
 		scroll = new JScrollPane(table);
 		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		selectionModel = table.getSelectionModel();
-		frame.getContentPane().add(scroll);
+		frame.getContentPane().add(scroll, BorderLayout.CENTER);
 
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		monitorWidth = (int) screenSize.getWidth();
@@ -141,6 +142,20 @@ public class DayMenu {
 		return frame;
 	}
 	public static void updateTable() {
-		table = new Table(ManageDate.getDate());
+//		frame.remove(scroll);
+//		JTable t = new Table(ManageDate.getDate());
+//		System.out.println(ManageDate.getDate());
+//		JScrollPane s = new JScrollPane(t);
+//		s.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+//		selectionModel = t.getSelectionModel();
+//		frame.getContentPane().add(s, BorderLayout.CENTER);
+//		s.repaint();
+//		frame.repaint();
+//		frame.setVisible(true);
+		
+//		I dont know why this was not working
+		
+		frame.dispose();
+		new DayMenu().createAndShowGUI();
 	}
 }

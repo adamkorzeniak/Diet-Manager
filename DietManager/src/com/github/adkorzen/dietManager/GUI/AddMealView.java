@@ -94,6 +94,7 @@ public class AddMealView {
 		addButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				if (!(amountField.getText().length() < 1)){
 				Date date = ManageDate.getDate();
 				String name = (String) mealNames.getSelectedItem();
 				String unit = (String) unitNames.getSelectedItem();
@@ -101,8 +102,9 @@ public class AddMealView {
 				int amount = Helper.calculateAmount(name, unit, stringAmount);
 				DatabaseManagement.getInstance().addNewEntry(date, name, amount);
 				frame.dispose();
+				DayMenu.updateTable();
 				DayMenu.getFrame().setVisible(true);
-			}
+			}}
 		});
 		setGUIConstraints(c, 0, 4, 2, 1, GridBagConstraints.BOTH, new Insets(10,10,10,10));
 		panel.add(addButton, c);
@@ -138,7 +140,6 @@ public class AddMealView {
 		unitNames = combo;
 		setGUIConstraints(c, 1, 3, GridBagConstraints.BOTH, new Insets(0,10,10,10));
 		panel.add(unitNames, c);
-		SwingUtilities.updateComponentTreeUI(frame);
 	}
 	
 	public static class MealNameComboListener implements ActionListener {

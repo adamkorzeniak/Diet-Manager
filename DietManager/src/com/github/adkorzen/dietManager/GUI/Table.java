@@ -12,12 +12,8 @@ public class Table extends JTable {
 	private Table table;
 	private Date date;
 
-	static String[] columnNames = { "Meal Name", "Calories", "Carbs", "Proteins", "Fats" };
+	static String[] columnNames = { "Meal Name", "Carbs", "Proteins", "Fats", "Calories"};
 
-//	static String[][] data = { { "P³aki owsiane, 150 g", "350", "30", "10", "5" },
-//			{ "Mleko, 400 g", "160", "15", "5", "10" } };
-	
-	
 	static String[][] data = new String [0][0];
 
 	public Table(Date d) {
@@ -33,7 +29,7 @@ public class Table extends JTable {
 	public void createTable() {
 		setData();
 		table = new Table(data, columnNames);
-		table.getColumnModel().getColumn(0).setPreferredWidth(200);
+		table.getColumnModel().getColumn(0).setPreferredWidth(300);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -51,10 +47,7 @@ public class Table extends JTable {
 	}
 	
 	public void setData() {
-		data = new String [1][5];
-//		DatabaseManagement.getInstance()s.getEntryData(date);
-		data[0][0] = "seven";
-		data[0][1] = "100";
+		data = 	DatabaseManagement.getInstance().getEntryData(date);
 	}
 
 }
