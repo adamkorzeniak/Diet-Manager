@@ -27,6 +27,7 @@ import com.github.adkorzen.dietManager.DatabaseManagement;
 import com.github.adkorzen.dietManager.Database;
 import com.github.adkorzen.dietManager.DateSetting;
 import com.github.adkorzen.dietManager.ManageDate;
+import com.github.adkorzen.dietManager.Options;
 import com.github.adkorzen.dietManager.GUI.CalendarView.Menu;
 
 public class MainMenu {
@@ -42,7 +43,8 @@ public class MainMenu {
 	private JTextField spinnerTextField;
 
 	public void createAndShowGUI() {
-
+		
+		Options.accessData();
 		frame = new JFrame("Diet Manager");
 		frame.getContentPane().setLayout(new GridBagLayout());
 		c = new GridBagConstraints();
@@ -102,7 +104,15 @@ public class MainMenu {
 		
 		optionsButton = new JButton("Options");
 		optionsButton.addActionListener(new ButtonListener());
-		setGUIConstraints(c, 0, 3, GridBagConstraints.BOTH, new Insets(30, 50, 30, 50));
+		setGUIConstraints(c, 0, 3, GridBagConstraints.BOTH, new Insets(20, 40, 20, 40));
+		optionsButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				frame.setEnabled(false);
+				OptionsMenu.create();
+			}
+			
+		});
 		frame.add(optionsButton, c);
 
 		confirmButton = new JButton("Confirm");

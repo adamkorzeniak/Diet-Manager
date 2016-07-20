@@ -24,7 +24,7 @@ public class DatabaseManagement {
 	private PreparedStatement statement;
 	{
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(new File("database.txt")));
+			BufferedReader br = new BufferedReader(new FileReader(new File("data/database.txt")));
 			host = br.readLine();
 			database = br.readLine();
 			login = br.readLine();
@@ -440,7 +440,9 @@ public class DatabaseManagement {
 			ResultSet resultNext = statementNext.executeQuery();
 			resultNext.next();
 			int rows = resultNext.getInt(1);
-			String[][] data = new String[rows + 1][5];
+			int additionalRows = 0;
+			if (Options.getCaloriesOptionsSet()) additionalRows = 2;
+			String[][] data = new String[rows+1+additionalRows][5];
 
 			int i = 0;
 			while (result.next()) {
@@ -474,6 +476,24 @@ public class DatabaseManagement {
 			data[rows][2] = String.format("%.2f", sumOfProteins);
 			data[rows][3] = String.format("%.2f", sumOfFats);
 			data[rows][4] = String.format("%.0f", sumOfCalories);
+			
+			if (Options.getCaloriesOptionsSet()) {
+				data[rows + 1][0] = "ZA£O¯ONY";
+				int cal =  Options.getCaloriesLimit();
+				double c = 0.01 *Options.getCaloriesLimit()*Options.getPercentage(0)/ 4;
+				double p = 0.01 * Options.getCaloriesLimit()*Options.getPercentage(1)/4;
+				double f = 0.01 * Options.getCaloriesLimit()*Options.getPercentage(2)/8;
+				data[rows + 1][1] = String.format("%.2f", c);
+				data[rows + 1][2] = String.format("%.2f", p);
+				data[rows + 1][3] = String.format("%.2f", f);
+				data[rows + 1][4] = String.format("%d", cal);
+				
+				data[rows + 2][0] = "POZOSTA£Y";
+				data[rows + 2][1] = String.format("%.2f", c - sumOfCarbs);
+				data[rows + 2][2] = String.format("%.2f", p - sumOfProteins);
+				data[rows + 2][3] = String.format("%.2f", f - sumOfFats);
+				data[rows + 2][4] = String.format("%.0f", cal - sumOfCalories);
+			}
 
 			return data;
 

@@ -6,7 +6,7 @@ import java.util.Date;
 import static com.github.adkorzen.dietManager.DatabaseManagement.getInstance;
 
 public class Helper {
-
+	
 	public static double calculate(String productName, String amount) {
 		int calories = getInstance().getCalories(productName);
 		int divider = getInstance().getCaloriesDivider(productName);
@@ -52,4 +52,5 @@ public class Helper {
 		return d;
 
 	}
+	
 }

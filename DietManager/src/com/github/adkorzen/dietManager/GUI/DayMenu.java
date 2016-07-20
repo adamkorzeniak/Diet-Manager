@@ -130,7 +130,7 @@ public class DayMenu {
 			} else if (e.getSource().equals(deleteButton) && selectionModel.getAnchorSelectionIndex() >= 0) {
 				int index = selectionModel.getAnchorSelectionIndex();
 				String temporary = (String) table.getModel().getValueAt(index, 0);
-				if (!(temporary.equals("RAZEM"))) {
+				if (!(temporary.equals("RAZEM"))&&!(temporary.equals("ZA£O¯ONY"))&&!(temporary.equals("POZOSTA£Y"))) {
 				String[] temp = temporary.split(", ");
 				String mealName = temp[0];
 				String[] temp2 = temp[1].split(" ");
@@ -140,7 +140,7 @@ public class DayMenu {
 			} else if (e.getSource().equals(editButton) && selectionModel.getAnchorSelectionIndex() >= 0) {
 				int index = selectionModel.getAnchorSelectionIndex();
 				String temporary = (String) table.getModel().getValueAt(index, 0);
-				if (!(temporary.equals("RAZEM"))) {
+				if (!(temporary.equals("RAZEM"))&&!(temporary.equals("ZA£O¯ONY"))&&!(temporary.equals("POZOSTA£Y"))) {
 				String[] temp = temporary.split(", ");
 				String mealName = temp[0];
 				String[] temp2 = temp[1].split(" ");
