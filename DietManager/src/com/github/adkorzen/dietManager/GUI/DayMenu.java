@@ -130,21 +130,24 @@ public class DayMenu {
 			} else if (e.getSource().equals(deleteButton) && selectionModel.getAnchorSelectionIndex() >= 0) {
 				int index = selectionModel.getAnchorSelectionIndex();
 				String temporary = (String) table.getModel().getValueAt(index, 0);
+				if (!(temporary.equals("RAZEM"))) {
 				String[] temp = temporary.split(", ");
 				String mealName = temp[0];
 				String[] temp2 = temp[1].split(" ");
 				String amount = temp2[0];
 				DatabaseManagement.getInstance().deleteMealEntry(ManageDate.getDate(), mealName, amount);
-				updateTable();
-//				frame.setVisible(true);
+				updateTable();}
 			} else if (e.getSource().equals(editButton) && selectionModel.getAnchorSelectionIndex() >= 0) {
 				int index = selectionModel.getAnchorSelectionIndex();
 				String temporary = (String) table.getModel().getValueAt(index, 0);
-				String[] temp = temporary.split(",");
+				if (!(temporary.equals("RAZEM"))) {
+				String[] temp = temporary.split(", ");
 				String mealName = temp[0];
-				System.out.println(mealName);
+				String[] temp2 = temp[1].split(" ");
+				String amount = temp2[0];
 
-				// new MealView().createView(mealName, amount);
+				MealView.createView(mealName, amount);
+				}
 			}
 		}
 

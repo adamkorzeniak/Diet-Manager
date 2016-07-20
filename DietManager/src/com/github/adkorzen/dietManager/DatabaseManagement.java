@@ -487,8 +487,8 @@ public class DatabaseManagement {
 		try {
 			Connection con = establishConnection();
 			String s = String.format(
-					"UPDATE TOP (1) calendar SET Name = '%s', Amount = %d WHERE Date = '%s' AND Name = '%s' AND Amount = %d",
-					name, Integer.toString(amount), Helper.dateToString(date), oldName, oldAmount);
+					"UPDATE calendar SET Name = '%s', Amount = %s WHERE Date = '%s' AND Name = '%s' AND Amount = %s LIMIT 1",
+					name, amount, Helper.dateToString(date), oldName, oldAmount);
 			PreparedStatement statement = con.prepareStatement(s);
 			statement.executeUpdate();
 

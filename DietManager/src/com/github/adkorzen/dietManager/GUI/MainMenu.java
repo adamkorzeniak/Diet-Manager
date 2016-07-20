@@ -32,7 +32,7 @@ import com.github.adkorzen.dietManager.GUI.CalendarView.Menu;
 public class MainMenu {
 	private static JFrame frame;
 	int monitorWidth, monitorHeight;
-	private JButton addToDatabaseButton, editDatabaseButton, checkDatabaseButton;
+	private JButton addToDatabaseButton, editDatabaseButton, checkDatabaseButton, optionsButton;
 	private JButton openCalendarButton, setDateTodayButton, setDateYesterdayButton;
 	private JButton confirmButton;
 	private JSpinner spinner;
@@ -99,6 +99,11 @@ public class MainMenu {
 				}
 			}
 		});
+		
+		optionsButton = new JButton("Options");
+		optionsButton.addActionListener(new ButtonListener());
+		setGUIConstraints(c, 0, 3, GridBagConstraints.BOTH, new Insets(30, 50, 30, 50));
+		frame.add(optionsButton, c);
 
 		confirmButton = new JButton("Confirm");
 		confirmButton.addActionListener(new ButtonListener());

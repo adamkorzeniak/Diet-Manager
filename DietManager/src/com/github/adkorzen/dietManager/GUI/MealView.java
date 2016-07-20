@@ -94,7 +94,7 @@ public class MealView {
 		addButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				if (!(amountField.getText().length() < 1)){
+				if (!(amountField.getText().length() < 1) && (unitNames.getSelectedItem()!=null)){
 				Date date = ManageDate.getDate();
 				String name = (String) mealNames.getSelectedItem();
 				String unit = (String) unitNames.getSelectedItem();
@@ -178,7 +178,7 @@ public class MealView {
 			addButton.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					if (!(amountField.getText().length() < 1)){
+					if (!(amountField.getText().length() < 1) && (unitNames.getSelectedItem()!=null)){
 					Date date = ManageDate.getDate();
 					String name = (String) mealNames.getSelectedItem();
 					String unit = (String) unitNames.getSelectedItem();
