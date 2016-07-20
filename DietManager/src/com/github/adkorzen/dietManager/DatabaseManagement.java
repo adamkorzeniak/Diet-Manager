@@ -10,14 +10,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
-
-import com.github.adkorzen.dietManager.GUI.AddMealView;
+import com.github.adkorzen.dietManager.GUI.MealView;
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.UNITS;
 import com.github.adkorzen.dietManager.GUI.UnitManagementMenu;
 
@@ -177,7 +173,7 @@ public class DatabaseManagement {
 			String[] newArray = list.toArray(new String[list.size()]);
 
 			JComboBox newCombo = new JComboBox(newArray);
-			AddMealView.setMealNameCombobox(newCombo);
+			MealView.setMealNameCombobox(newCombo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -202,7 +198,7 @@ public class DatabaseManagement {
 			String[] newArray = list.toArray(new String[list.size()]);
 
 			JComboBox newCombo = new JComboBox(newArray);
-			AddMealView.setUnitNameCombobox(newCombo);
+			MealView.setUnitNameCombobox(newCombo);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -357,8 +353,8 @@ public class DatabaseManagement {
 		int value = 0;
 		try {
 			Connection con = establishConnection();
-			PreparedStatement statement = con.prepareStatement(
-					String.format("SELECT Calories FROM Meal WHERE Name = '%s'", mealName));
+			PreparedStatement statement = con
+					.prepareStatement(String.format("SELECT Calories FROM Meal WHERE Name = '%s'", mealName));
 			ResultSet result = statement.executeQuery();
 			result.next();
 			value = result.getInt(1);
@@ -369,13 +365,13 @@ public class DatabaseManagement {
 
 		return value;
 	}
-	
+
 	public int getCaloriesDivider(String mealName) {
 		int value = 0;
 		try {
 			Connection con = establishConnection();
-			PreparedStatement statement = con.prepareStatement(
-					String.format("SELECT Unit_amount FROM Meal WHERE Name = '%s'", mealName));
+			PreparedStatement statement = con
+					.prepareStatement(String.format("SELECT Unit_amount FROM Meal WHERE Name = '%s'", mealName));
 			ResultSet result = statement.executeQuery();
 			result.next();
 			value = result.getInt(1);
@@ -386,13 +382,14 @@ public class DatabaseManagement {
 
 		return value;
 	}
-	
+
 	public int getMultiplier(String mealName, String unitName) {
 		int value = 0;
 		try {
 			Connection con = establishConnection();
 			PreparedStatement statement = con.prepareStatement(
-					String.format("SELECT Multiplier FROM Secondary_units WHERE Meal_name = '%s' AND Unit_Name = '%s'", mealName, unitName));
+					String.format("SELECT Multiplier FROM Secondary_units WHERE Meal_name = '%s' AND Unit_Name = '%s'",
+							mealName, unitName));
 			ResultSet result = statement.executeQuery();
 			result.next();
 			value = result.getInt(1);
@@ -403,17 +400,18 @@ public class DatabaseManagement {
 
 		return value;
 	}
-	
+
 	public boolean isPrimaryUnit(String mealName, String unitName) {
 		try {
 			Connection con = establishConnection();
-			PreparedStatement statement = con.prepareStatement(
-					String.format("SELECT Primary_Unit FROM Meal WHERE Name = '%s'", mealName));
+			PreparedStatement statement = con
+					.prepareStatement(String.format("SELECT Primary_Unit FROM Meal WHERE Name = '%s'", mealName));
 			ResultSet result = statement.executeQuery();
 			result.next();
 			String s = result.getString(1);
-			
-			if (s.equals(unitName)) return true;
+
+			if (s.equals(unitName))
+				return true;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -422,29 +420,31 @@ public class DatabaseManagement {
 	}
 
 	public String[][] getEntryData(Date date) {
-		
+
 		String name, unit;
 		int amount;
 		double calories, carbs, proteins, fats, multiplier;
-		double sumOfCalories = 0, sumOfCarbs = 0, sumOfProteins = 0, sumOfFats = 0; 
-		
+		double sumOfCalories = 0, sumOfCarbs = 0, sumOfProteins = 0, sumOfFats = 0;
+
 		try {
 			Connection con = establishConnection();
 			String d = Helper.dateToString(date);
-			PreparedStatement statement = con.prepareStatement(
-					String.format(("SELECT c.name, c.amount, m.unit_amount, m.primary_unit, m.calories, m.carbs, m.proteins, m. fats FROM calendar AS c JOIN meal AS m ON c.name = m.name WHERE c.date = '%s'"), d));
+			PreparedStatement statement = con.prepareStatement(String.format(
+					("SELECT c.name, c.amount, m.unit_amount, m.primary_unit, m.calories, m.carbs, m.proteins, m. fats FROM calendar AS c JOIN meal AS m ON c.name = m.name WHERE c.date = '%s'"),
+					d));
 			ResultSet result = statement.executeQuery();
-			
-			PreparedStatement statementNext = con.prepareStatement(
-					String.format(("SELECT COUNT(*) FROM calendar JOIN meal ON calendar.name = meal.name WHERE calendar.date = '%s'"), d));
+
+			PreparedStatement statementNext = con.prepareStatement(String.format(
+					("SELECT COUNT(*) FROM calendar JOIN meal ON calendar.name = meal.name WHERE calendar.date = '%s'"),
+					d));
 			ResultSet resultNext = statementNext.executeQuery();
 			resultNext.next();
 			int rows = resultNext.getInt(1);
-			String [][] data = new String [rows + 1][5];
-			
+			String[][] data = new String[rows + 1][5];
+
 			int i = 0;
 			while (result.next()) {
-				
+
 				name = result.getString(1);
 				amount = result.getInt(2);
 				unit = result.getString(4);
@@ -453,36 +453,63 @@ public class DatabaseManagement {
 				carbs = result.getDouble(6) * multiplier;
 				proteins = result.getDouble(7) * multiplier;
 				fats = result.getDouble(8) * multiplier;
-				
+
 				sumOfCalories += calories;
 				sumOfCarbs += carbs;
 				sumOfProteins += proteins;
 				sumOfFats += fats;
-				
+
 				data[i][0] = Helper.getDescription(name, amount, unit);
 				data[i][1] = String.format("%.2f", carbs);
 				data[i][2] = String.format("%.2f", proteins);
 				data[i][3] = String.format("%.2f", fats);
 				data[i][4] = String.format("%.0f", calories);
-				
+
 				i++;
-				
+
 			}
-			
+
 			data[rows][0] = "RAZEM";
 			data[rows][1] = String.format("%.2f", sumOfCarbs);
 			data[rows][2] = String.format("%.2f", sumOfProteins);
 			data[rows][3] = String.format("%.2f", sumOfFats);
 			data[rows][4] = String.format("%.0f", sumOfCalories);
-			
+
 			return data;
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new String [0][0];
+		return new String[0][0];
 	}
-	
-	
+
+	public void updateEntry(Date date, String oldName, String name, String oldAmount, int amount) {
+		try {
+			Connection con = establishConnection();
+			String s = String.format(
+					"UPDATE TOP (1) calendar SET Name = '%s', Amount = %d WHERE Date = '%s' AND Name = '%s' AND Amount = %d",
+					name, Integer.toString(amount), Helper.dateToString(date), oldName, oldAmount);
+			PreparedStatement statement = con.prepareStatement(s);
+			statement.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteMealEntry(Date date, String mealName, String amount) {
+		try {
+			Connection con = establishConnection();
+			String s = String.format("DELETE FROM calendar WHERE Date = '%s' AND Name = '%s' AND Amount = %s LIMIT 1",
+					Helper.dateToString(date), mealName, amount) ;
+			PreparedStatement statement = con.prepareStatement(s);
+			statement.executeUpdate();
+			
+			System.out.println(s);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 }
