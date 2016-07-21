@@ -36,7 +36,7 @@ public class DatabaseManagement {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public Connection establishConnection() throws Exception {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection con = DriverManager.getConnection(host + database + "?autoReconnect=true&useSSL=false", login,
@@ -340,7 +340,6 @@ public class DatabaseManagement {
 			String d = Helper.dateToString(date);
 			String s = "INSERT INTO calendar (Date, Name, Amount) VALUES ('" + d + "', '" + name + "', '" + amount
 					+ "')";
-			System.out.println(s);
 			PreparedStatement statement = con.prepareStatement(s);
 			statement.executeUpdate();
 
@@ -524,12 +523,24 @@ public class DatabaseManagement {
 					Helper.dateToString(date), mealName, amount) ;
 			PreparedStatement statement = con.prepareStatement(s);
 			statement.executeUpdate();
-			
-			System.out.println(s);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	public void deleteProduct(String name) {
+		try {
+			Connection con = establishConnection();
+			String s = String.format("DELETE FROM meal WHERE Name = '%s'", name) ;
+			PreparedStatement statement = con.prepareStatement(s);
+			statement.executeUpdate();
+			
+			String s2 = String.format("DELETE FROM calendar WHERE Name = '%s'", name) ;
+			PreparedStatement statement2 = con.prepareStatement(s2);
+			statement2.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

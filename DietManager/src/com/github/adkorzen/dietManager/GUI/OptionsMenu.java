@@ -15,6 +15,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Date;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -40,7 +41,7 @@ public class OptionsMenu {
 	private static JFormattedTextField caloriesLimitField, carbsField, proteinsField, fatsField;
 	private static JLabel caloriesLimitLabel, carbsLabel, proteinsLabel, fatsLabel;
 	private static int monitorWidth, monitorHeight;
-	private static JButton saveButton, deleteButton;
+	private static JButton saveButton, deleteButton, advancedButton;
 
 	public static void create() {
 		String calorieLimit = "";
@@ -118,7 +119,7 @@ public class OptionsMenu {
 		panel.add(fatsField, c);
 
 		saveButton = new JButton("Save");
-		setGUIConstraints(c, 0, 4, GridBagConstraints.BOTH, new Insets(10, 100, 10, 10));
+		setGUIConstraints(c, 0, 4, 2, 1, GridBagConstraints.BOTH, new Insets(10, 100, 10, 100));
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (caloriesLimitField.getText().length() < 1) {
@@ -165,7 +166,7 @@ public class OptionsMenu {
 				fatsField.setText("");
 			}
 		});
-		setGUIConstraints(c, 1, 4, GridBagConstraints.BOTH, new Insets(10, 1, 10, 1));
+		setGUIConstraints(c, 0, 5, GridBagConstraints.BOTH, new Insets(10, 50, 10, 50));
 		panel.add(deleteButton, c);
 
 		frame.add(panel);
@@ -181,9 +182,12 @@ public class OptionsMenu {
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				MainMenu.getFrame().setEnabled(true);
-				;
 			}
 		});
 
+	}
+
+	public static JFrame getFrame() {
+		return frame;
 	}
 }

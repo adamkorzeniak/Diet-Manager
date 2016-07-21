@@ -87,12 +87,8 @@ public class Options {
 				fileReader.close();
 			}
 		} catch (IOException e) {
-			try {
-				file.createNewFile();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
 			e.printStackTrace();
 		}
+		
 	}
 }

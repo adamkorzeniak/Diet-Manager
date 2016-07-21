@@ -49,8 +49,7 @@ public class EditDatabaseMenu {
 	private static JScrollPane scroll;
 	private static JComboBox unitType;
 	private static JPanel south;
-	private static JButton saveButton;
-	private static JButton closeButton;
+	private static JButton saveButton, deleteButton, closeButton;
 	private static DefaultListModel<String> listModel;
 	private static ListSelectionModel selectionModel;
 	private static boolean searching;
@@ -109,6 +108,11 @@ public class EditDatabaseMenu {
 			}
 		});
 		frame.add(scroll, c);
+
+		deleteButton = new JButton("Delete");
+		setGUIConstraints(c, 3, 1, 0.2, 1.0, GridBagConstraints.BOTH, new Insets(60, 10, 200, 10));
+		frame.add(deleteButton, c);
+		deleteButton.addActionListener(new ButtonListener());
 
 		unitLabel = new JLabel("Unit:");
 		setGUIConstraints(c, 0, 2, 0.2, 1.0, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
@@ -252,6 +256,15 @@ public class EditDatabaseMenu {
 					frame.setEnabled(false);
 					UnitManagementMenu.createAndShowGUI(name);
 				}
+			} else if (e.getSource().equals(deleteButton)) {
+				if (!selectionModel.isSelectionEmpty()) {
+					int index = selectionModel.getAnchorSelectionIndex();
+					String name = listModel.get(index);
+					DatabaseManagement.getInstance().deleteProduct(name);
+					searching = true;
+					DatabaseManagement.getInstance().searchMealTable(listModel, "", false);
+					searching = false;
+				}
 			}
 		}
 	}
@@ -263,9 +276,11 @@ public class EditDatabaseMenu {
 	public static JFrame getFrame() {
 		return frame;
 	}
+
 	public static void setMealName(String s) {
 		mealNameInput.setText(s);
 	}
+
 	public static void setSelection() {
 		mealList.setSelectedIndex(0);
 	}
