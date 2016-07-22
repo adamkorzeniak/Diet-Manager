@@ -66,7 +66,8 @@ public class AddToDatabaseMenu {
 		setGUIConstraints(c, 0, 2, GridBagConstraints.BOTH, new Insets(10, 10, 10, 10));
 		frame.add(primaryUnitLabel, c);
 
-		primaryUnitInput = new JFormattedTextField(100);
+		primaryUnitInput = new JFormattedTextField();
+		primaryUnitInput.setText("100");
 		primaryUnitInput.setHorizontalAlignment(SwingConstants.CENTER);
 		primaryUnitInput.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
@@ -126,6 +127,7 @@ public class AddToDatabaseMenu {
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				advancedHistory = false;
+				advancedOpen = false;
 				MainMenu.getFrame().setVisible(true);
 			}
 		});
@@ -255,6 +257,7 @@ public class AddToDatabaseMenu {
 			} else if (e.getSource() == closeButton) {
 				frame.dispose();
 				advancedHistory = false;
+				advancedOpen= false;
 				MainMenu.getFrame().setVisible(true);
 			}
 		}
