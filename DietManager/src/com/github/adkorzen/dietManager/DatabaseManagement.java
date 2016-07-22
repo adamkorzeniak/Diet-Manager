@@ -196,7 +196,6 @@ public class DatabaseManagement {
 				list.add(result.getString(2));
 			}
 			String[] newArray = list.toArray(new String[list.size()]);
-
 			JComboBox newCombo = new JComboBox(newArray);
 			MealView.setUnitNameCombobox(newCombo);
 		} catch (Exception e) {
@@ -346,40 +345,6 @@ public class DatabaseManagement {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public int getCalories(String mealName) {
-		int value = 0;
-		try {
-			Connection con = establishConnection();
-			PreparedStatement statement = con
-					.prepareStatement(String.format("SELECT Calories FROM Meal WHERE Name = '%s'", mealName));
-			ResultSet result = statement.executeQuery();
-			result.next();
-			value = result.getInt(1);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return value;
-	}
-
-	public int getCaloriesDivider(String mealName) {
-		int value = 0;
-		try {
-			Connection con = establishConnection();
-			PreparedStatement statement = con
-					.prepareStatement(String.format("SELECT Unit_amount FROM Meal WHERE Name = '%s'", mealName));
-			ResultSet result = statement.executeQuery();
-			result.next();
-			value = result.getInt(1);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return value;
 	}
 
 	public int getMultiplier(String mealName, String unitName) {

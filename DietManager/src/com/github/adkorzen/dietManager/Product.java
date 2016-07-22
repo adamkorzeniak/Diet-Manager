@@ -1,11 +1,5 @@
 package com.github.adkorzen.dietManager;
 
-import static com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.getCarbs;
-import static com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.getFats;
-import static com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.getProteins;
-
-import java.util.TreeMap;
-
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu;
 import com.github.adkorzen.dietManager.GUI.AddToDatabaseMenu.UNITS;
 
@@ -15,7 +9,6 @@ public class Product {
 	private int unitDivider;
 	private double caloriesPerUnit;
 	private double carbs, proteins, fats;
-	private TreeMap secondaryUnits;
 	
 	public Product(String name, AddToDatabaseMenu.UNITS primaryUnit, int unitDivider, double caloriesPerUnit, double carbs, double proteins, double fats) {
 		this.name = name.toLowerCase();

@@ -31,19 +31,4 @@ public class Helper {
 		String result = year + "-" + month + "-" + day;
 		return result;
 	}
-
-	public static Date stringToDate(String s) {
-		Calendar c = Calendar.getInstance();
-		int year = Integer.parseInt(s.substring(0, 4));
-		int month = Integer.parseInt(s.substring(4, 6)) - 1;
-		int day = Integer.parseInt(s.substring(7));
-		c.set(Calendar.YEAR, year);
-		c.set(Calendar.MONTH, month);
-		c.set(Calendar.DAY_OF_MONTH, day);
-
-		Date d = c.getTime();
-		return d;
-
-	}
-	
 }

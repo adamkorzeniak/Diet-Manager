@@ -61,7 +61,6 @@ public class MealView {
 
 			public void actionPerformed(ActionEvent arg0) {
 				String search = searchField.getText();
-				System.out.println(search);
 				DatabaseManagement.getInstance().searchMealTable(search);
 			}
 			
@@ -219,7 +218,6 @@ public class MealView {
 		mealNames.addActionListener(new MealNameComboListener());
 		setGUIConstraints(c, 0, 1, 2, 1, GridBagConstraints.BOTH, new Insets(10,10,10,10));
 		panel.add(mealNames, c);
-		System.out.println((String)mealNames.getSelectedItem());
 		DatabaseManagement.getInstance().searchSecondaryUnitTable((String)mealNames.getSelectedItem());
 		SwingUtilities.updateComponentTreeUI(frame);
 		
@@ -236,10 +234,8 @@ public class MealView {
 		public void actionPerformed(ActionEvent e) {
 				int index = mealNames.getSelectedIndex();
 				String name = (String) mealNames.getItemAt(index);
-				System.out.println(name);
-				DatabaseManagement.getInstance().searchSecondaryUnitTable(name);
-				
+				DatabaseManagement.getInstance().searchSecondaryUnitTable((String)mealNames.getSelectedItem());
+				SwingUtilities.updateComponentTreeUI(frame);
 		}
-		
 	}
 }
