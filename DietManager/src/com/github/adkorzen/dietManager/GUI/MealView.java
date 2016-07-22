@@ -26,6 +26,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
+import com.github.adkorzen.dietManager.Database;
 import com.github.adkorzen.dietManager.DatabaseManagement;
 import com.github.adkorzen.dietManager.Helper;
 import com.github.adkorzen.dietManager.ManageDate;
@@ -60,6 +61,7 @@ public class MealView {
 
 			public void actionPerformed(ActionEvent arg0) {
 				String search = searchField.getText();
+				System.out.println(search);
 				DatabaseManagement.getInstance().searchMealTable(search);
 			}
 			
@@ -217,8 +219,10 @@ public class MealView {
 		mealNames.addActionListener(new MealNameComboListener());
 		setGUIConstraints(c, 0, 1, 2, 1, GridBagConstraints.BOTH, new Insets(10,10,10,10));
 		panel.add(mealNames, c);
+		System.out.println((String)mealNames.getSelectedItem());
 		DatabaseManagement.getInstance().searchSecondaryUnitTable((String)mealNames.getSelectedItem());
 		SwingUtilities.updateComponentTreeUI(frame);
+		
 	}
 	public static void setUnitNameCombobox(JComboBox combo) {
 		panel.remove(unitNames);
@@ -232,6 +236,7 @@ public class MealView {
 		public void actionPerformed(ActionEvent e) {
 				int index = mealNames.getSelectedIndex();
 				String name = (String) mealNames.getItemAt(index);
+				System.out.println(name);
 				DatabaseManagement.getInstance().searchSecondaryUnitTable(name);
 				
 		}

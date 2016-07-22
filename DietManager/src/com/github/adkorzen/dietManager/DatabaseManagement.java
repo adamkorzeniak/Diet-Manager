@@ -481,7 +481,7 @@ public class DatabaseManagement {
 				int cal =  Options.getCaloriesLimit();
 				double c = 0.01 *Options.getCaloriesLimit()*Options.getPercentage(0)/ 4;
 				double p = 0.01 * Options.getCaloriesLimit()*Options.getPercentage(1)/4;
-				double f = 0.01 * Options.getCaloriesLimit()*Options.getPercentage(2)/8;
+				double f = 0.01 * Options.getCaloriesLimit()*Options.getPercentage(2)/9;
 				data[rows + 1][1] = String.format("%.2f", c);
 				data[rows + 1][2] = String.format("%.2f", p);
 				data[rows + 1][3] = String.format("%.2f", f);

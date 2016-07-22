@@ -7,13 +7,6 @@ import static com.github.adkorzen.dietManager.DatabaseManagement.getInstance;
 
 public class Helper {
 	
-	public static double calculate(String productName, String amount) {
-		int calories = getInstance().getCalories(productName);
-		int divider = getInstance().getCaloriesDivider(productName);
-		double result = (Double.parseDouble(amount) * calories / divider);
-		return result;
-	}
-
 	public static String getDescription(String name, int amount, String unit) {
 		String s = name + ", " + amount + " " + unit;
 		return s;

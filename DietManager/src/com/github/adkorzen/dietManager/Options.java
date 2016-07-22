@@ -43,7 +43,8 @@ public class Options {
 	}
 
 	public static int getPercentage(int index) {
-		if(index < 3) return percentage[index];
+		if (index < 3)
+			return percentage[index];
 		return 0;
 	}
 
@@ -79,16 +80,26 @@ public class Options {
 				caloriesOptionsSet = Boolean.parseBoolean(bf.readLine());
 				compositionOptionsSet = Boolean.parseBoolean(bf.readLine());
 				caloriesLimit = Integer.parseInt(bf.readLine());
-				percentage = new int [3];
+				percentage = new int[3];
 				percentage[0] = Integer.parseInt(bf.readLine());
 				percentage[1] = Integer.parseInt(bf.readLine());
 				percentage[2] = Integer.parseInt(bf.readLine());
 
 				fileReader.close();
 			}
+		} catch (NumberFormatException ne) {
+			caloriesOptionsSet = false;
+			compositionOptionsSet = false;
+			caloriesLimit = 0;
+			percentage = new int[3];
+			percentage[0] = 0;
+			percentage[1] = 0;
+			percentage[2] = 0;
+			file.delete();
 		} catch (IOException e) {
 			e.printStackTrace();
+
 		}
-		
+
 	}
 }
